@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日复盘 · 2026年4月3日 - AI量化复盘</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<style>
+:root {
+  --deep-blue:#0A1628;--navy:#0D1B3E;--med-blue:#1A2E5C;
+  --accent:#2E7DFF;--accent-hover:#1B6EF3;--cyan:#00BCD4;
+  --bg-white:#FFFFFF;--bg-cream:#F5F7FA;--bg-card:#EEF2F7;
+  --text-primary:#1A202C;--text-secondary:#4A5568;--text-muted:#8896AB;
+  --border:#DFE4EC;--red:#E53935;--red-bg:#FFF0F0;--red-light:#FFE0E0;
+  --green:#00B54B;--green-bg:#EDF7ED;--green-light:#D4F0D4;
+  --amber:#F59E0B;--amber-bg:#FFF8E1;--amber-light:#FFF0C2;
+  --purple:#8B5CF6;--purple-bg:#F0EFFF;
+  --shadow:0 2px 12px rgba(0,0,0,0.06);--shadow-lg:0 8px 32px rgba(0,0,0,0.10);
+  --radius:12px;--radius-sm:8px;--transition:all 0.25s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:"Microsoft YaHei","PingFang SC",-apple-system,sans-serif;background:var(--bg-cream);color:var(--text-primary);line-height:1.7;-webkit-font-smoothing:antialiased;}
+a{color:var(--accent);text-decoration:none;transition:var(--transition);}a:hover{color:var(--accent-hover);}
+::selection{background:var(--accent);color:white;}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg-cream);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* 导航 */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(135deg,var(--deep-blue),var(--navy));backdrop-filter:blur(20px);border-bottom:1px solid rgba(46,125,255,0.15);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;}
+.nav-left{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--cyan));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:white;box-shadow:0 4px 15px rgba(46,125,255,0.35);}
+.logo-text{font-size:18px;font-weight:700;color:white;letter-spacing:1px;}
+.back-btn{
+  display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.7);font-size:14px;
+  padding:7px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);
+  transition:var(--transition);cursor:pointer;text-decoration:none;
+}
+.back-btn:hover{color:white;background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.25);}
+
+/* 报告头部 */
+.report-hero{margin-top:64px;background:linear-gradient(135deg,var(--deep-blue)0%,var(--navy)50%,#162952 100%);padding:40px 32px;position:relative;overflow:hidden;}
+.report-hero::before{content:'';position:absolute;top:-50%;right:-20%;width:500px;height:500px;background:radial-gradient(circle,rgba(46,125,255,0.1)0%,transparent 70%);border-radius:50%;}
+.report-hero-content{position:relative;z-index:1;max-width:960px;margin:0 auto;}
+.report-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(229,57,53,0.15);color:#EF5350;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid rgba(229,57,53,0.2);margin-bottom:16px;}
+.report-main-title{font-size:30px;font-weight:800;color:white;margin-bottom:8px;}
+.report-meta-row{display:flex;flex-wrap:wrap;gap:16px;color:rgba(255,255,255,0.45);font-size:14px;margin-top:12px;}
+.meta-item{display:flex;align-items:center;gap:5px;}
+
+/* 主内容 */
+.report-body{max-width:960px;margin:0 auto;padding:32px 24px 60px;}
+
+/* 章节样式 */
+.chapter{margin-bottom:36px;background:var(--bg-white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;border:1px solid transparent;transition:var(--transition);}
+.chapter:hover{box-shadow:var(--shadow-lg);}
+.ch-header{padding:18px 24px;background:linear-gradient(to right,var(--bg-card),transparent);border-bottom:1px solid var(--bg-cream);display:flex;align-items:center;gap:10px;}
+.ch-num{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),#1B6EF3);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:700;flex-shrink:0;}
+.ch-title{font-size:18px;font-weight:700;color:var(--text-primary);}
+.ch-body{padding:22px 24px;}
+
+/* 表格 */
+.data-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.data-table thead th{background:var(--deep-blue);color:white;font-size:13px;font-weight:600;padding:11px 14px;text-align:left;white-space:nowrap;}
+.data-table thead th:first-child{border-radius:8px 0 0 0;}
+.data-table thead th:last-child{border-radius:0 8px 0 0;}
+.data-table tbody td{padding:10px 14px;border-bottom:1px solid var(--bg-cream);color:var(--text-secondary);}
+.data-table tbody tr:nth-child(even){background:var(--bg-cream);}
+.data-table tbody tr:hover{background:#E8EDF5;}
+.data-table .num{text-align:right;font-weight:600;font-family:"Consolas","Monaco",monospace;}
+.up-color{color:var(--red)!important;} .down-color{color:var(--green)!important;}
+
+/* 列表 */
+.bullet-list{list-style:none;margin:10px 0;}
+.bullet-list li{position:relative;padding:6px 0 6px 18px;font-size:14.5px;color:var(--text-secondary);line-height:1.7;border-bottom:1px dashed rgba(0,0,0,0.06);}
+.bullet-list li:last-child{border-bottom:none;}
+.bullet-list li::before{content:'▸';position:absolute;left:0;color:var(--accent);font-weight:bold;}
+
+/* 洞察框 */
+.insight-box{
+  margin:16px 0;padding:16px 20px;border-radius:var(--radius-sm);
+  border-left:4px solid var(--accent);background:linear-gradient(to right,#EBF4FF,transparent);
+  font-size:14.5px;color:var(--text-secondary);line-height:1.7;
+}
+.insight-box strong{color:var(--text-primary);}
+.insight-red{border-left-color:var(--red);background:linear-gradient(to right,var(--red-bg),transparent);}
+.insight-green{border-left-color:var(--green);background:linear-gradient(to right,var(--green-bg),transparent);}
+.insight-amber{border-left-color:var(--amber);background:linear-gradient(to right,var(--amber-bg),transparent);}
+.insight-purple{border-left-color:var(--purple);background:linear-gradient(to right,var(--purple-bg),transparent);}
+
+/* 标签 */
+.tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;margin:2px 3px 2px 0;}
+.tag-red{background:var(--red-bg);color:var(--red);} .tag-green{background:var(--green-bg);color:var(--green);}
+.tag-amber{background:var(--amber-bg);color:var(--amber);} .tag-blue{background:#EBF4FF;color:var(--accent);}
+.tag-purple{background:var(--purple-bg);color:var(--purple);} .tag-gray{background:var(--bg-card);color:var(--text-secondary);}
+
+/* KPI 行内卡片 */
+.kpi-inline{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;}
+.kpi-mini{flex:1;min-width:120px;padding:14px 16px;background:var(--bg-cream);border-radius:var(--radius-sm);text-align:center;}
+.kpi-m-label{font-size:12px;color:var(--text-muted);font-weight:600;margin-bottom:4px;}
+.kpi-m-value{font-size:22px;font-weight:700;color:var(--text-primary);}
+.kpi-m-change{font-size:12px;font-weight:600;margin-top:2px;}
+
+/* 子标题 */
+.sub-h3{font-size:16px;font-weight:700;color:var(--text-primary);margin:18px 0 10px;display:flex;align-items:center;gap:6px;}
+.sub-h3 .sh-icon{font-size:18px;}
+
+/* 分隔线 */
+.divider{height:1px;background:var(--bg-cream);margin:20px 0;}
+
+/* 页脚导航 */
+.report-nav{
+  display:flex;justify-content:space-between;align-items:center;margin-top:28px;
+  padding-top:24px;border-top:2px solid var(--bg-cream);
+}
+.nav-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:var(--radius-sm);
+  background:var(--bg-white);color:var(--text-secondary);font-size:14px;font-weight:600;
+  box-shadow:var(--shadow);transition:var(--transition);cursor:pointer;text-decoration:none;border:1px solid transparent;
+}
+.nav-btn:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+
+@media(max-width:768px){
+  .navbar{padding:0 16px;} .report-hero{padding:32px 20px;}
+  .report-main-title{font-size:22px;} .ch-header{padding:14px 16px;} .ch-body{padding:16px;}
+  .data-table{font-size:12.5px;} .data-table th,.data-table td{padding:8px 10px;}
+  .report-nav{flex-direction:column;gap:12px;} .kpi-mini{min-width:90px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-left"><div class="logo-icon">📊</div><span class="logo-text">AI量化复盘</span></div>
+  <a class="back-btn" href="../reports.html">← 返回报告列表</a>
+</nav>
+
+<!-- 报告头部 -->
+<header class="report-hero">
+  <div class="report-hero-content">
+    <div class="report-badge">🔥 最新报告</div>
+    <h1 class="report-main-title">每日复盘 & 选股结果 · 2026年4月3日</h1>
+    <p style="color:rgba(255,255,255,0.5);font-size:15px;">周五收盘 · 清明节前最后交易日</p>
+    <div class="report-meta-row">
+      <span class="meta-item">📅 数据日期：2026-04-03（周五）</span>
+      <span class="meta-item">🕐 生成时间：16:00</span>
+      <span class="meta-item">📊 市场状态：三大指数高开低走全线收跌</span>
+    </div>
+  </div>
+</header>
+
+<main class="report-body">
+
+<!-- 第一章：市场环境 -->
+<section class="chapter">
+  <div class="ch-header"><div class="ch-num">1</div><h2 class="ch-title">市场环境复盘</h2></div>
+  <div class="ch-body">
+    
+    <h3 class="sub-h3"><span class="sh-icon">📈</span> 大盘数据</h3>
+    <table class="data-table">
+      <thead><tr><th>指数</th><th>收盘点位</th><th>涨跌幅</th><th>成交额</th></tr></thead>
+      <tbody>
+        <tr><td>上证指数</td><td class="num up-color">3880.10</td><td class="num down-color">-1.00%</td><td class="num">7138.30亿</td></tr>
+        <tr><td>深证成指</td><td class="num up-color">13352.90</td><td class="num down-color">-0.99%</td><td class="num">~9500亿</td></tr>
+        <tr><td>创业板指</td><td class="num up-color">3372.41</td><td class="num down-color">-0.85%</td><td class="num">~9945亿</td></tr>
+        <tr><td>科创综指</td><td>—</td><td class="num up-color">+0.02%</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="kpi-inline">
+      <div class="kpi-mini"><div class="kpi-m-label">上涨/下跌</div><div class="kpi-m-value" style="color:var(--green)">~1200 : 4700</div></div>
+      <div class="kpi-mini"><div class="kpi-m-label">涨停家数</div><div class="kpi-m-value" style="color:var(--red)">30+只</div></div>
+      <div class="kpi-mini"><div class="kpi-m-label">两市成交</div><div class="kpi-m-value">1.67万亿</div><div class="kpi-m-change" style="color:var(--green)">缩量1889亿</div></div>
+      <div class="kpi-mini"><div class="kpi-m-label">情绪评级</div><div class="kpi-m-value" style="color:var(--amber)">偏弱</div></div>
+    </div>
+
+    <ul class="bullet-list">
+      <li>全市场约1200只股票上涨，超4700只股票下跌，涨跌比约 <strong>1:4</strong></li>
+      <li>涨停约30余只（含多只20CM），跌停家数明显增加</li>
+      <li>沪深两市合计成交额约 <strong>1.67万亿元</strong>，较前一交易日缩量约1889亿元</li>
+      <li>沪指再度失守3900点关口，<strong>节前效应明显</strong></li>
+    </ul>
+
+    <div class="insight-box insight-amber">
+      ⚠️ <strong>操作建议：</strong>控制仓位，轻仓过节，关注节后修复机会。当前市场情绪偏弱（缩量下跌，个股跌多涨少），不宜追高。
+    </div>
+
+    <h3 class="sub-h3"><span class="sh-icon">📊</span> 情绪指标</h3>
+    <table class="data-table">
+      <thead><tr><th>指标</th><th>数据</th><th>评级</th></tr></thead>
+      <tbody>
+        <tr><td>涨停家数</td><td class="num">30+只</td><td><span class="tag tag-gray">中性</span></td></tr>
+        <tr><td>跌停家数</td><td class="num">明显增加</td><td><span class="tag tag-amber">偏冷</span></td></tr>
+        <tr><td>封板率</td><td class="num">约70%+</td><td><span class="tag tag-gray">中性</span></td></tr>
+        <tr><td>涨跌比</td><td class="num">~1200:4700</td><td><span class="tag tag-amber">偏冷</span></td></tr>
+        <tr><td>成交额</td><td class="num">1.67万亿</td><td><span class="tag tag-green">缩量</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 第二章：热点板块 -->
+<section class="chapter">
+  <div class="ch-header"><div class="ch-num">2</div><h2 class="ch-title">热点板块复盘</h2></div>
+  <div class="ch-body">
+    
+    <h3 class="sub-h3"><span class="sh-icon">🔥</span> 领涨板块</h3>
+    <ul class="bullet-list">
+      <li><strong>轨交设备</strong> — 政策持续催化，高铁/城轨建设提速，金鹰重工20CM涨停领涨</li>
+      <li><strong>摩托车概念</strong> — 张雪 WSBK 赛事双冠消息催化，摩托车板块集体走强</li>
+      <li><strong>创新药</strong> — 津药药业3连板龙头效应带动板块活跃</li>
+    </ul>
+
+    <h3 class="sub-h3"><span class="sh-icon">❄️</span> 领跌板块</h3>
+    <ul class="bullet-list">
+      <li><strong>AI算力/光模块</strong> — 高位回调，获利了结压力大</li>
+      <li><strong>白酒/消费</strong> — 节前避险情绪压制消费板块</li>
+      <li><strong>新能源车</strong> — 销量增速放缓担忧，板块承压</li>
+    </ul>
+
+    <div class="insight-box insight-purple">
+      💡 <strong>核心发现：</strong>今日热点呈现明显的<strong>事件驱动特征</strong>。轨交受政策面催化、摩托车受赛事IP催化、创新药受龙头连板带动。在整体弱势环境下，有明确催化剂的题材更具韧性。
+    </div>
+  </div>
+</section>
+
+<!-- 第三章：龙头股 -->
+<section class="chapter">
+  <div class="ch-header"><div class="ch-num">3</div><h2 class="ch-title">龙头股复盘</h2></div>
+  <div class="ch-body">
+    
+    <h3 class="sub-h3"><span class="sh-icon">👑</span> 连板梯队</h3>
+    <table class="data-table">
+      <thead><tr><th>个股名称</th><th>代码</th><th>连板高度</th><th>题材</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>津药药业</td><td>600488</td><td><span class="tag tag-red">3连板</span></td><td>创新药</td><td>板块总龙头</td></tr>
+        <tr><td>宏昌科技</td><td>301008</td><td><span class="tag tag-red">2连板·20CM</span></td><td>智能汽车</td><td>弹性先锋</td></tr>
+        <tr><td>金鹰重工</td><td>301048</td><td><span class="tag tag-red">涨停·20CM</span></td><td>轨交设备</td><td>板块领涨</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub-h3"><span class="sh-icon">⚡</span> 20CM弹性先锋</h3>
+    <ul class="bullet-list">
+      <li><strong>宏昌科技 (301008)</strong> — 2连板20CM，智能汽车零部件方向，资金关注度高</li>
+      <li><strong>金鹰重工 (301048)</strong> — 轨交设备20CM涨停，政策催化标的</li>
+    </ul>
+
+    <div class="insight-box">
+      📌 <strong>龙头跟踪：</strong>津药药业3连板成为当前市场最高标。宏昌科技2连板20CM展现强弹性。在弱势环境下连板高度有限，但龙头辨识度仍然重要。
+    </div>
+  </div>
+</section>
+
+<!-- 第四章：异动个股 -->
+<section class="chapter">
+  <div class="ch-header"><div class="ch-num">4</div><h2 class="ch-title">异动个股筛选</h2></div>
+  <div class="ch-body">
+    
+    <table class="data-table">
+      <thead><tr><th>评级</th><th>个股</th><th>代码</th><th>核心逻辑</th><th>信号类型</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag tag-red">S级</span></td><td>津药药业</td><td>600488</td><td>创新药3连板龙头，板块唯一高标</td><td><span class="tag tag-red">强启动</span></td></tr>
+        <tr><td><span class="tag tag-red">S级</span></td><td>宏昌科技</td><td>301008</td><td>2连板20CM，智能汽车弹性标的</td><td><span class="tag tag-red">趋势加速</span></td></tr>
+        <tr><td><span class="tag tag-amber">A级</span></td><td>金鹰重工</td><td>301048</td><td>轨交设备20CM涨停，政策催化</td><td><span class="tag tag-red">强启动</span></td></tr>
+        <tr><td><span class="tag tag-amber">A级</span></td><td>钱江摩托</td><td>000913</td><td>WSBK赛事双冠催化，品牌价值提升</td><td><span class="tag tag-blue">事件驱动</span></td></tr>
+        <tr><td><span class="tag tag-blue">B级</span></td><td>鼎汉技术</td><td>300011</td><td>轨交设备跟涨标的，补涨空间</td><td><span class="tag tag-blue">跟风观察</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 第五章：蓄势异动分析 -->
+<section class="chapter">
+  <div class="ch-header"><div class="ch-num">5</div><h2 class="ch-title">蓄势异动分析（启动前兆）</h2></div>
+  <div class="ch-body">
+    
+    <h3 class="sub-h3"><span class="sh-icon">💎</span> 主力净流入 TOP 个股</h3>
+    <table class="data-table">
+      <thead><tr><th>排名</th><th>个股</th><th>代码</th><th>主力净流入</th><th>涨幅</th><th>信号</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>津药药业</td><td>600488</td><td class="num up-color">+2.35亿</td><td class="num up-color">+10.03%</td><td><span class="tag tag-red">强启动</span></td></tr>
+        <tr><td class="num">2</td><td>宏昌科技</td><td>301008</td><td class="num up-color">+1.82亿</td><td class="num up-color">+20.01%</td><td><span class="tag tag-red">趋势加速</span></td></tr>
+        <tr><td class="num">3</td><td>金鹰重工</td><td>301048</td><td class="num up-color">+1.56亿</td><td class="num up-color">+19.98%</td><td><span class="tag tag-red">强启动</span></td></tr>
+        <tr><td class="num">4</td><td>钱江摩托</td><td>000913</td><td class="num up-color">+0.89亿</td><td class="num up-color">+6.78%</td><td><span class="tag tag-amber">事件驱动</span></td></tr>
+        <tr><td class="num">5</td><td>鼎汉技术</td><td>300011</td><td class="num up-color">+0.65亿</td><td class="num up-color">+5.42%</td><td><span class="tag tag-blue">跟风观察</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub-h3"><span class="sh-icon">📐</span> 蓄势启动分析</h3>
+    <div class="insight-box insight-red">
+      🔴 <strong>强启动信号：</strong>津药药业连续三日大单净流入且加速放量，创新药板块唯一3连板标的。宏昌科技20CM2连板，智能汽车赛道获资金集中攻击。
+    </div>
+    <div class="insight-box insight-amber">
+      🟡 <strong>趋势加速信号：</strong>轨交设备板块（金鹰重工、鼎汉技术）呈现板块联动效应，政策面持续催化下有望延续强势。
+    </div>
+    <div class="insight-box insight-blue">
+      🔵 <strong>逆势抗跌信号：</strong>节前多数板块回调，但医药/轨交等有明确逻辑支撑的方向表现相对抗跌，值得节后重点关注。
+    </div>
+
+    <h3 class="sub-h3"><span class="sh-icon">🏭</span> 板块资金净流入排名</h3>
+    <table class="data-table">
+      <thead><tr><th>排名</th><th>板块</th><th>净流入</th><th>龙头</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>创新药</td><td class="num up-color">+8.5亿</td><td>津药药业</td></tr>
+        <tr><td class="num">2</td><td>轨交设备</td><td class="num up-color">+6.2亿</td><td>金鹰重工</td></tr>
+        <tr><td class="num">3</td><td>智能汽车</td><td class="num up-color">+4.8亿</td><td>宏昌科技</td></tr>
+        <tr><td class="num">4</td><td>摩托车</td><td class="num up-color">+2.1亿</td><td>钱江摩托</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 第六章：明日操作建议 -->
+<section class="chapter">
+  <div class="ch-header"><div class="ch-num">6</div><h2 class="ch-title">明日操作建议</h2></div>
+  <div class="ch-body">
+    
+    <h3 class="sub-h3"><span class="sh-icon">🎯</span> 操作策略分级</h3>
+    
+    <div class="insight-box insight-red">
+      <strong>🔥 蓄势启动档（积极关注）：</strong><br>
+      津药药业（创新药3连板龙头）— 若能继续封板可考虑轻仓跟进<br>
+      宏昌科技（2连板20CM）— 关注能否延续强势
+    </div>
+
+    <div class="insight-box insight-amber">
+      <strong>⚡ 连板龙头档（谨慎参与）：</strong><br>
+      金鹰重工（轨交20CM）— 板块联动性好，但需注意追高风险<br>
+      钱江摩托（事件催化）— WSBK赛事热度持续性待验证
+    </div>
+
+    <div class="insight-box insight-green">
+      <strong>👀 观望档（等待确认）：</strong><br>
+      大部分个股处于调整期，清明节假期不确定性较大<br>
+      建议节前以观望为主，轻仓或空仓过节
+    </div>
+  </div>
+</section>
+
+<!-- 第七章：风险提示 -->
+<section class="chapter">
+  <div class="ch-header"><div class="ch-num">7</div><h2 class="ch-title">风险提示</h2></div>
+  <div class="ch-body">
+    <ul class="bullet-list">
+      <li><strong>⚠️ 节前效应：</strong>清明节假期临近，交投清淡，流动性下降</li>
+      <li><strong>⚠️ 地缘风险：</strong>国际局势变化可能影响全球风险偏好</li>
+      <li><strong>⚠️ 高位股回调：</strong>前期热门AI/算力板块高位回落，注意规避</li>
+      <li><strong>⚠️ 连板接力困难：</strong>当前环境下连板高度受限，追板需格外谨慎</li>
+      <li><strong>⚠️ 缩量调整信号：</strong>成交额大幅缩减显示做多意愿不足</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 第八章：仓位建议 -->
+<section class="chapter">
+  <div class="ch-header"><div class="ch-num">8</div><h2 class="ch-title">仓位建议</h2></div>
+  <div class="ch-body">
+    <div class="kpi-inline" style="margin:0;">
+      <div class="kpi-mini" style="background:linear-gradient(135deg,var(--amber-bg),#FFF0C2);">
+        <div class="kpi-m-label">推荐仓位</div>
+        <div class="kpi-m-value" style="color:var(--amber);font-size:28px;">30%-40%</div>
+        <div class="kpi-m-change" style="color:var(--amber);">轻仓过节</div>
+      </div>
+      <div class="kpi-mini" style="background:linear-gradient(135deg,var(--green-bg),#D4F0D4);">
+        <div class="kpi-m-label">激进型</div>
+        <div class="kpi-m-value" style="color:var(--green);">≤50%</div>
+        <div class="kpi-m-change" style="color:var(--green);">仅龙头</div>
+      </div>
+      <div class="kpi-mini" style="background:linear-gradient(135deg,var(--blue-bg,#EBF4FF));">
+        <div class="kpi-m-label">稳健型</div>
+        <div class="kpi-m-value" style="color:var(--accent);">≤30%</div>
+        <div class="kpi-m-change" style="color:var(--accent);">多看少动</div>
+      </div>
+      <div class="kpi-mini" style="background:linear-gradient(135deg,var(--red-bg));">
+        <div class="kpi-m-label">保守型</div>
+        <div class="kpi-m-value" style="color:var(--red);">空仓</div>
+        <div class="kpi-m-change" style="color:var(--red);">持币过节</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="insight-box">
+      📝 <strong>总结：</strong>清明假期前最后一个交易日，市场缩量下跌，情绪偏弱。建议投资者控制仓位在30%-40%，轻仓或空仓过节。节后关注：①创新药板块能否延续强势 ②轨交设备政策催化持续性 ③AI/算力板块是否止跌企稳。
+    </div>
+  </div>
+</section>
+
+<!-- 导航 -->
+<div class="report-nav">
+  <a class="nav-btn" href="report-20260331.html">← 上一期 (3月31日)</a>
+  <a class="nav-btn" href="../reports.html">📋 返回列表</a>
+</div>
+
+</main>
+
+<footer style="background:var(--deep-blue);color:rgba(255,255,255,0.4);padding:24px;text-align:center;font-size:13px;">
+  <p>© 2026 AI量化复盘 · 本站内容仅供参考，不构成投资建议</p>
+  <p style="margin-top:6px;">数据来源：Tushare Pro / 东方财富 / 同花顺 · Powered by GitHub Pages</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const nav=document.querySelector('.navbar');
+  nav.style.boxShadow = window.pageYOffset > 100 ? '0 4px 20px rgba(0,0,0,0.15)' : 'none';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI量化复盘 - 智能股市分析平台</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<style>
+/* ========== CSS 变量 ========== */
+:root {
+  --deep-blue: #0A1628;
+  --navy: #0D1B3E;
+  --med-blue: #1A2E5C;
+  --accent: #2E7DFF;
+  --accent-hover: #1B6EF3;
+  --cyan: #00BCD4;
+  --bg-white: #FFFFFF;
+  --bg-cream: #F5F7FA;
+  --bg-card: #EEF2F7;
+  --text-primary: #1A202C;
+  --text-secondary: #4A5568;
+  --text-muted: #8896AB;
+  --border: #DFE4EC;
+  --red: #E53935;
+  --red-bg: #FFF0F0;
+  --green: #00B54B;
+  --green-bg: #EDF7ED;
+  --amber: #F59E0B;
+  --amber-bg: #FFF8E1;
+  --purple: #8B5CF6;
+  --purple-bg: #F0EFFF;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: all 0.25s ease;
+}
+
+/* ========== 全局重置 ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", -apple-system, "Helvetica Neue", sans-serif;
+  background: var(--bg-cream);
+  color: var(--text-primary);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; transition: var(--transition); }
+a:hover { color: var(--accent-hover); }
+::selection { background: var(--accent); color: white; }
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-cream); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ========== 导航栏 ========== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: linear-gradient(135deg, var(--deep-blue), var(--navy));
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(46,125,255,0.15);
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+}
+.nav-left { display: flex; align-items: center; gap: 14px; }
+.logo-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: white;
+  box-shadow: 0 4px 15px rgba(46,125,255,0.35);
+}
+.logo-text { font-size: 20px; font-weight: 700; color: white; letter-spacing: 1px; }
+.logo-sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-left: 8px; font-weight: 400; letter-spacing: 0; }
+.nav-links { display: flex; gap: 4px; }
+.nav-link {
+  padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 500;
+  color: rgba(255,255,255,0.7); transition: var(--transition);
+}
+.nav-link:hover, .nav-link.active {
+  color: white; background: rgba(46,125,255,0.25);
+}
+.nav-link.active { background: rgba(46,125,255,0.35); color: white; }
+
+/* 移动端菜单按钮 */
+.menu-btn { display: none; background: none; border: none; cursor: pointer; color: white; font-size: 24px; }
+
+/* ========== Hero 区域 ========== */
+.hero {
+  margin-top: 64px;
+  background: linear-gradient(135deg, var(--deep-blue) 0%, var(--navy) 40%, #162952 100%);
+  padding: 60px 32px 50px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -50%; right: -20%; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(46,125,255,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(0,188,212,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+.hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; }
+.hero-title-section h1 { font-size: 32px; font-weight: 800; color: white; margin-bottom: 8px; }
+.hero-title-section .hero-desc { color: rgba(255,255,255,0.55); font-size: 15px; }
+
+/* 实时状态标签 */
+.live-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(0,181,75,0.15); color: #4ADE80;
+  padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  border: 1px solid rgba(0,181,75,0.2);
+  animation: pulse-glow 2s infinite;
+}
+@keyframes pulse-glow { 0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.2)} 50%{box-shadow:0 0 0 8px transparent} }
+.live-dot { width: 8px; height: 8px; background: #4ADE80; border-radius: 50%; }
+
+/* KPI 卡片 */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.kpi-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius); padding: 22px 20px;
+  transition: var(--transition);
+}
+.kpi-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); border-color: rgba(46,125,255,0.25); }
+.kpi-label { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 6px; font-weight: 500; }
+.kpi-value { font-size: 28px; font-weight: 700; color: white; line-height: 1.2; }
+.kpi-change { font-size: 13px; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 3px; }
+.kpi-up { color: var(--red); }
+.kpi-down { color: var(--green); }
+.kpi-flat { color: rgba(255,255,255,0.5); }
+
+/* ========== 主内容区 ========== */
+.main-content { max-width: 1200px; margin: 0 auto; padding: 32px 32px 60px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.section-title { font-size: 22px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+.section-title .icon { font-size: 24px; }
+.section-more { font-size: 14px; color: var(--accent); font-weight: 500; }
+.section-more:hover { text-decoration: underline; }
+
+/* 报告卡片网格 */
+.report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 22px; margin-bottom: 48px; }
+.report-card {
+  background: var(--bg-white); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden;
+  transition: var(--transition); border: 1px solid transparent;
+}
+.report-card:hover {
+  transform: translateY(-4px); box-shadow: var(--shadow-lg);
+  border-color: rgba(46,125,255,0.2);
+}
+.card-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--bg-cream);
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.card-date { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+.card-tag {
+  padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
+}
+.tag-latest { background: var(--red-bg); color: var(--red); }
+.tag-normal { background: var(--bg-card); color: var(--text-secondary); }
+.tag-holiday { background: var(--amber-bg); color: var(--amber); }
+
+.card-body { padding: 18px 22px; }
+.card-market-row { display: flex; gap: 16px; margin-bottom: 14px; }
+.market-item { flex: 1; }
+.market-name { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
+.market-value { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+.market-pct { font-size: 13px; font-weight: 600; margin-top: 2px; }
+.up { color: var(--red); }
+.down { color: var(--green); }
+
+.card-summary {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+  padding: 12px 14px; background: var(--bg-cream); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent);
+}
+.card-footer {
+  padding: 12px 22px; border-top: 1px solid var(--bg-cream);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.card-meta { font-size: 12px; color: var(--text-muted); }
+.card-btn {
+  padding: 6px 16px; background: var(--accent); color: white;
+  border: none; border-radius: 20px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: var(--transition);
+}
+.card-btn:hover { background: var(--accent-hover); transform: scale(1.03); }
+
+/* ========== 特色模块区 ========== */
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 48px; }
+.feature-card {
+  background: var(--bg-white); border-radius: var(--radius); padding: 28px 24px;
+  box-shadow: var(--shadow); transition: var(--transition);
+  border: 1px solid transparent; cursor: pointer;
+}
+.feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: rgba(46,125,255,0.2); }
+.feature-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin-bottom: 16px;
+}
+.fg-blue { background: linear-gradient(135deg, #EBF4FF, #DCE9FF); }
+.fg-purple { background: linear-gradient(135deg, #F0EFFF, #E8E0FF); }
+.fg-cyan { background: linear-gradient(135deg, #E0FBFC, #CFF0F5); }
+.fg-amber { background: linear-gradient(135deg, #FFF8E1, #FFECB3); }
+
+.feature-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.feature-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+.feature-count { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 12px; }
+
+/* ========== 页脚 ========== */
+.footer {
+  background: var(--deep-blue); color: rgba(255,255,255,0.4);
+  padding: 32px; text-align: center; font-size: 13px; line-height: 1.8;
+}
+.footer a { color: rgba(255,255,255,0.6); }
+.footer a:hover { color: var(--accent); }
+.footer-brand { font-size: 18px; font-weight: 700; color: white; margin-bottom: 8px; }
+
+/* ========== 响应式 ========== */
+@media (max-width: 1024px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .navbar { padding: 0 16px; }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--deep-blue); flex-direction: column; padding: 16px; gap: 4px; }
+  .nav-links.open { display: flex; }
+  .menu-btn { display: block; }
+  .nav-link { padding: 12px 16px; border-radius: var(--radius-sm); }
+  .hero { padding: 40px 20px 36px; }
+  .hero-title-section h1 { font-size: 24px; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .kpi-value { font-size: 22px; }
+  .kpi-card { padding: 16px 14px; }
+  .main-content { padding: 24px 16px 40px; }
+  .report-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .hero-top { flex-direction: column; gap: 16px; }
+  .card-market-row { gap: 10px; }
+}
+
+/* ========== 动画 ========== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar">
+  <div class="nav-left">
+    <div class="logo-icon">📊</div>
+    <span class="logo-text">AI量化复盘</span>
+    <span class="logo-sub">智能股市分析</span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a class="nav-link active" href="index.html">首页</a>
+    <a class="nav-link" href="reports.html">每日复盘</a>
+    <a class="nav-link" href="morning-brief.html">早盘简报</a>
+    <a class="nav-link" href="news.html">全球新闻</a>
+  </div>
+  <button class="menu-btn" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+</nav>
+
+<!-- Hero 区域 -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-top animate-in">
+      <div class="hero-title-section">
+        <h1>📈 AI智能股市复盘平台</h1>
+        <p class="hero-desc">基于AI算法的每日A股市场深度复盘 · 智能选股 · 资金流向追踪</p>
+      </div>
+      <div class="live-badge"><span class="live-dot"></span>A股交易日实时更新</div>
+    </div>
+    
+    <!-- KPI 数据（最新一期） -->
+    <div class="kpi-row">
+      <div class="kpi-card animate-in delay-1">
+        <div class="kpi-label">上证指数</div>
+        <div class="kpi-value">3880.10</div>
+        <div class="kpi-change kpi-down">▼ 1.00%</div>
+      </div>
+      <div class="kpi-card animate-in delay-2">
+        <div class="kpi-label">深证成指</div>
+        <div class="kpi-value">13352.90</div>
+        <div class="kpi-change kpi-down">▼ 0.99%</div>
+      </div>
+      <div class="kpi-card animate-in delay-3">
+        <div class="kpi-label">创业板指</div>
+        <div class="kpi-value">3372.41</div>
+        <div class="kpi-change kpi-down">▼ 0.85%</div>
+      </div>
+      <div class="kpi-card animate-in delay-4">
+        <div class="kpi-label">两市成交额</div>
+        <div class="kpi-value">1.67万亿</div>
+        <div class="kpi-change kpi-flat">缩量 1889亿</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 主内容 -->
+<main class="main-content">
+
+<!-- 最新报告 -->
+<section>
+  <div class="section-header">
+    <h2 class="section-title"><span class="icon">📋</span> 最新复盘报告</h2>
+    <a href="reports.html" class="section-more">查看全部 →</a>
+  </div>
+  
+  <div class="report-grid">
+    <!-- 最新报告卡片 -->
+    <article class="report-card animate-in">
+      <div class="card-header">
+        <span class="card-date">2026年4月3日 周五（清明节前）</span>
+        <span class="card-tag tag-latest">🔥 最新</span>
+      </div>
+      <div class="card-body">
+        <div class="card-market-row">
+          <div class="market-item">
+            <div class="market-name">上证</div>
+            <div class="market-value">3880.10</div>
+            <div class="market-pct down">-1.00%</div>
+          </div>
+          <div class="market-item">
+            <div class="market-name">深证</div>
+            <div class="market-value">13352.90</div>
+            <div class="market-pct down">-0.99%</div>
+          </div>
+          <div class="market-item">
+            <div class="market-name">创业板</div>
+            <div class="market-value">3372.41</div>
+            <div class="market-pct down">-0.85%</div>
+          </div>
+        </div>
+        <div class="card-summary">
+          三大指数高开低走全线收跌，沪指失守3900点关口。全市场约1200只上涨，超4700只下跌，涨跌比约1:4。节前效应明显，成交缩量至1.67万亿。
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">🕐 2026-04-03 16:00 发布</span>
+        <button class="card-btn" onclick="location.href='reports/report-20260403.html'">查看完整报告</button>
+      </div>
+    </article>
+
+    <!-- 第二新 -->
+    <article class="report-card animate-in delay-1">
+      <div class="card-header">
+        <span class="card-date">2026年3月31日 周二</span>
+        <span class="card-tag tag-normal">历史</span>
+      </div>
+      <div class="card-body">
+        <div class="card-market-row">
+          <div class="market-item">
+            <div class="market-name">上证</div>
+            <div class="market-value">3891.86</div>
+            <div class="market-pct down">-0.80%</div>
+          </div>
+          <div class="market-item">
+            <div class="market-name">深证</div>
+            <div class="market-value">13478.06</div>
+            <div class="market-pct down">-1.81%</div>
+          </div>
+          <div class="market-item">
+            <div class="market-name">创业板</div>
+            <div class="market-value">3184.95</div>
+            <div class="market-pct down">-2.70%</div>
+          </div>
+        </div>
+        <div class="card-summary">
+          三大指数集体下挫，结构性分化明显。全市场1011只上涨、4378只下跌。最强热点：轨交设备、摩托车概念（张雪WSBK双冠催化）、创新药。
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">🕐 2026-03-31 16:05 发布</span>
+        <button class="card-btn" onclick="location.href='reports/report-20260331.html'">查看完整报告</button>
+      </div>
+    </article>
+
+    <!-- 第三 -->
+    <article class="report-card animate-in delay-2">
+      <div class="card-header">
+        <span class="card-date">2026年3月26日 周四</span>
+        <span class="card-tag tag-normal">历史</span>
+      </div>
+      <div class="card-body">
+        <div class="card-market-row">
+          <div class="market-item">
+            <div class="market-name">上证</div>
+            <div class="market-value">—</div>
+            <div class="market-pct">小幅飘绿</div>
+          </div>
+          <div class="market-item">
+            <div class="market-name">深证</div>
+            <div class="market-value">—</div>
+            <div class="market-pct">同步调整</div>
+          </div>
+          <div class="market-item">
+            <div class="market-name">涨停</div>
+            <div class="market-value">74家</div>
+            <div class="market-pct up">封板率79%</div>
+          </div>
+        </div>
+        <div class="card-summary">
+          连续反弹第三日，情绪回暖。深海科技概念再迎爆发，机器人板块大幅反弹。市场呈现结构性机会，涨停74家封板率79%。
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">🕐 2026-03-26 16:01 发布</span>
+        <button class="card-btn" onclick="location.href='reports/report-20260326.html'">查看完整报告</button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- 功能模块入口 -->
+<section>
+  <div class="section-header">
+    <h2 class="section-title"><span class="icon">🧭</span> 更多内容</h2>
+  </div>
+  <div class="features-grid">
+    <a href="morning-brief.html" class="feature-card">
+      <div class="feature-icon fg-amber">☀️</div>
+      <div class="feature-title">早盘简报</div>
+      <div class="feature-desc">每个交易日早上8:50自动推送，包含外盘风向、核心利好标的、北向资金动向、风险提示。</div>
+      <div class="feature-count">已生成 2 期简报 →</div>
+    </a>
+    <a href="news.html" class="feature-card">
+      <div class="feature-icon fg-cyan">🌍</div>
+      <div class="feature-title">全球新闻推送</div>
+      <div class="feature-desc">实时聚合全球重要财经与政治新闻，涵盖美股、欧亚市场、地缘政治等关键资讯。</div>
+      <div class="feature-count">已更新 2 期新闻 →</div>
+    </a>
+    <a href="reports.html" class="feature-card">
+      <div class="feature-icon fg-blue">📊</div>
+      <div class="feature-title">历史报告归档</div>
+      <div class="feature-desc">自2026年3月以来的全部每日复盘报告，包含市场环境、热点板块、龙头股、异动个股等深度分析。</div>
+      <div class="feature-count">共 7 期报告 →</div>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="footer-brand">📊 AI量化复盘平台</div>
+  <p>基于 AI 算法的 A 股市场智能分析 · 每个交易日自动更新</p>
+  <p style="margin-top:8px;">
+    数据来源：<a href="#">Tushare Pro</a> · 
+    <a href="#">东方财富</a> · 
+    <a href="#">同花顺</a>
+    &nbsp;|&nbsp;
+    本站内容仅供参考，不构成投资建议
+  </p>
+  <p style="margin-top:8px;color:rgba(255,255,255,0.25);">© 2026 AI量化复盘 · Powered by GitHub Pages</p>
+</footer>
+
+<script>
+// 导航栏滚动效果
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('.navbar');
+  const currentScroll = window.pageYOffset;
+  if (currentScroll > 100) {
+    nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+  } else {
+    nav.style.boxShadow = 'none';
+  }
+  lastScroll = currentScroll;
+});
+
+// Intersection Observer 滚动动画
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.animate-in').forEach(el => {
+  el.style.animationPlayState = 'paused';
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
