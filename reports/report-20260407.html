@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日复盘报告 · 2026年4月7日 · 清明节后首日 | AI量化复盘</title>
+<style>
+/* ===== 全局字体 ===== */
+@font-face {
+  font-family: "MSYH";
+  src: local("Microsoft YaHei"), local("msyh.ttc");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "MSYH";
+  src: local("Microsoft YaHei"), local("msyh.ttc");
+  font-weight: bold;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ===== 顶部装饰条 ===== */
+.top-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #0D1B3E 0%, #2E7DFF 50%, #0D1B3E 100%);
+  z-index: 100;
+}
+
+/* ===== 页面头部 ===== */
+.hero {
+  background: linear-gradient(160deg, #0D1B3E 0%, #1A2E5C 60%, #0D2B6A 100%);
+  padding: 56px 40px 52px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -60px; right: -80px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(46,125,255,0.13) 0%, transparent 65%);
+  border-radius: 50%;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -40px; left: -60px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0,188,212,0.07) 0%, transparent 65%);
+  border-radius: 50%;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(0,181,75,0.15); color: #4ADE80;
+  padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  border: 1px solid rgba(0,181,75,0.2);
+  margin-bottom: 16px;
+}
+.hero-badge .dot { width: 7px; height: 7px; background: #4ADE80; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.hero-title { font-size: 28px; font-weight: 700; color: white; margin-bottom: 8px; letter-spacing: 0.5px; }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 32px; }
+
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+.kpi-card {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 12px; padding: 20px 18px;
+  transition: all 0.25s;
+}
+.kpi-card:hover { background: rgba(255,255,255,0.09); border-color: rgba(46,125,255,0.3); transform: translateY(-2px); }
+.kpi-lbl { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 6px; font-weight: 500; letter-spacing: 0.5px; }
+.kpi-val { font-size: 26px; font-weight: 700; color: white; line-height: 1.2; }
+.kpi-chg { font-size: 13px; font-weight: 600; margin-top: 4px; }
+.kpi-up { color: #FF4D4F; }
+.kpi-down { color: #52C41A; }
+.kpi-flat { color: rgba(255,255,255,0.4); }
+
+/* ===== 主内容 ===== */
+.body-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px 60px; }
+
+/* ===== 章节区块 ===== */
+.section {
+  background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  margin-bottom: 24px; overflow: hidden;
+}
+.sec-hdr {
+  background: #EBF2FA; padding: 16px 24px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid #D6E4F0;
+}
+.sec-num {
+  background: linear-gradient(135deg, #1A2E5C, #2E7DFF);
+  color: white; width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.sec-title { font-size: 17px; font-weight: 700; color: #1A2E5C; }
+.sec-body { padding: 22px 24px; }
+
+/* ===== 表格 ===== */
+table { width: 100%; border-collapse: collapse; margin-bottom: 4px; font-size: 14px; }
+thead th {
+  background: #2C3E50; color: white; padding: 10px 12px;
+  text-align: left; font-weight: 600; font-size: 13px;
+}
+thead th:first-child { border-radius: 6px 0 0 0; }
+thead th:last-child { border-radius: 0 6px 0 0; }
+tbody tr:nth-child(even) { background: #F7F9FC; }
+tbody tr:nth-child(odd) { background: white; }
+tbody tr:hover { background: #EEF4FB; }
+td { padding: 9px 12px; border-bottom: 1px solid #EDF2F7; color: #333; vertical-align: middle; }
+td:first-child { font-weight: 600; color: #1A2E5C; }
+.text-r { text-align: right; }
+.text-c { text-align: center; }
+.txt-up { color: #FF4D4F; font-weight: 600; }
+.txt-dn { color: #52C41A; font-weight: 600; }
+.txt-muted { color: #8896AB; }
+
+/* ===== KPI小卡片 ===== */
+.kpi-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+.kpi-mini-card {
+  background: #F5F8FF; border: 1px solid #DDE8FB;
+  border-radius: 8px; padding: 14px 16px; text-align: center;
+}
+.kpi-mini-val { font-size: 22px; font-weight: 700; color: #1A2E5C; line-height: 1; }
+.kpi-mini-lbl { font-size: 11px; color: #8896AB; margin-top: 4px; font-weight: 500; }
+.kpi-mini-chg { font-size: 13px; font-weight: 600; margin-top: 3px; }
+
+/* ===== 洞察框 ===== */
+.insight-box {
+  background: #EEF6FF; border-left: 4px solid #2E7DFF;
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
+}
+.insight-box strong { color: #1A2E5C; }
+.insight-box p { color: #333; font-size: 14px; line-height: 1.7; margin: 4px 0; }
+
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 11px; font-weight: 600; margin-left: 4px;
+}
+.tag-red { background: #FFF0F0; color: #E53935; }
+.tag-amber { background: #FFF8E1; color: #D97706; }
+.tag-blue { background: #EEF4FB; color: #1A6EF3; }
+.tag-green { background: #EDF7ED; color: #00B54B; }
+.tag-gray { background: #F5F5F5; color: #666; }
+
+/* ===== bullet列表 ===== */
+.bullets { list-style: none; padding: 0; margin: 8px 0; }
+.bullets li { padding: 6px 0 6px 20px; position: relative; font-size: 14px; color: #333; line-height: 1.6; }
+.bullets li::before { content: '▸'; position: absolute; left: 0; color: #2E7DFF; font-weight: 700; }
+
+/* ===== 分隔线 ===== */
+hr { border: none; border-top: 1px solid #EDF2F7; margin: 20px 0; }
+
+/* ===== 风险提示 ===== */
+.risk-box { background: #FFF9F0; border: 1px solid #FFE5B4; border-radius: 8px; padding: 14px 18px; margin: 10px 0; }
+.risk-box .title { font-weight: 700; color: #D97706; font-size: 14px; margin-bottom: 8px; }
+.risk-box li { color: #555; font-size: 13px; padding: 3px 0; }
+
+/* ===== 仓位建议 ===== */
+.position-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+.pos-card { border-radius: 10px; padding: 16px; text-align: center; }
+.pos-card.best { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border: 1px solid #A5D6A7; }
+.pos-card.normal { background: linear-gradient(135deg, #E3F2FD, #BBDEFB); border: 1px solid #90CAF9; }
+.pos-card.caution { background: linear-gradient(135deg, #FFF3E0, #FFE0B2); border: 1px solid #FFCC80; }
+.pos-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.pos-card.best .pos-label { color: #2E7D32; }
+.pos-card.normal .pos-label { color: #1565C0; }
+.pos-card.caution .pos-label { color: #E65100; }
+.pos-val { font-size: 28px; font-weight: 700; color: #1A2E5C; line-height: 1; }
+.pos-lbl { font-size: 12px; color: #666; margin-top: 4px; }
+
+/* ===== 页脚 ===== */
+.footer-bar { height: 3px; background: linear-gradient(90deg, #0D1B3E, #2E7DFF, #0D1B3E); margin-top: 40px; }
+.footer { text-align: center; padding: 24px; color: #8896AB; font-size: 13px; line-height: 1.8; }
+.footer strong { color: #4A5568; }
+
+/* ===== 响应式 ===== */
+@media(max-width: 768px){
+  .hero { padding: 40px 20px 40px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .body-wrap { padding: 20px 16px 40px; }
+  .sec-hdr { padding: 12px 16px; }
+  .sec-body { padding: 16px; }
+  .kpi-mini { grid-template-columns: repeat(2, 1fr); }
+  .position-box { grid-template-columns: 1fr; }
+  table { font-size: 12px; }
+  td, thead th { padding: 7px 8px; }
+}
+
+/* ===== 打印优化 ===== */
+@media print {
+  .top-bar, .footer-bar { display: none; }
+  .body-wrap { padding-top: 20px; }
+  .section { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部装饰条 -->
+<div class="top-bar"></div>
+
+<!-- 页面头部 -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="dot"></span>清明节后首日 · 2026年4月7日（周二）</div>
+    <h1 class="hero-title">每日复盘报告 · AI量化分析</h1>
+    <p class="hero-sub">数据采集自东方财富 · 财联社 · 同花顺 &nbsp;|&nbsp; 生成时间：2026-04-07 16:00</p>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-lbl">上证指数</div>
+        <div class="kpi-val">3890.11</div>
+        <div class="kpi-chg kpi-up">▲ +0.26%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">深证成指</div>
+        <div class="kpi-val">13397.63</div>
+        <div class="kpi-chg kpi-up">▲ +0.36%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">创业板指</div>
+        <div class="kpi-val">3172.41</div>
+        <div class="kpi-chg kpi-up">▲ +0.36%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">两市成交额</div>
+        <div class="kpi-val">1.61万亿</div>
+        <div class="kpi-chg kpi-flat">缩量约500亿</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 主内容 -->
+<div class="body-wrap">
+
+<!-- ====== 第一章：市场环境复盘 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">1</div>
+    <div class="sec-title">市场环境复盘</div>
+  </div>
+  <div class="sec-body">
+
+    <div class="kpi-mini">
+      <div class="kpi-mini-card">
+        <div class="kpi-mini-val txt-up">+0.26%</div>
+        <div class="kpi-mini-lbl">上证</div>
+        <div class="kpi-mini-chg txt-muted">3880.10 → 3890.11</div>
+      </div>
+      <div class="kpi-mini-card">
+        <div class="kpi-mini-val txt-up">+0.36%</div>
+        <div class="kpi-mini-lbl">深证成指</div>
+        <div class="kpi-mini-chg txt-muted">13352.90 → 13397.63</div>
+      </div>
+      <div class="kpi-mini-card">
+        <div class="kpi-mini-val txt-up">+0.36%</div>
+        <div class="kpi-mini-lbl">创业板指</div>
+        <div class="kpi-mini-chg txt-muted">3161.02 → 3172.41</div>
+      </div>
+      <div class="kpi-mini-card">
+        <div class="kpi-mini-val txt-up">+1.42%</div>
+        <div class="kpi-mini-lbl">科创50</div>
+        <div class="kpi-mini-chg txt-muted">半导体领涨</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">情绪指标总览</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>指标</th><th class="text-c">数据</th><th>评级</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>涨停家数</td><td class="text-c txt-up">93只</td><td><span class="tag tag-red">偏暖</span></td></tr>
+        <tr><td>封板率</td><td class="text-c">~78%</td><td><span class="tag tag-blue">中性偏好</span></td></tr>
+        <tr><td>连板晋级率</td><td class="text-c txt-up">75%</td><td><span class="tag tag-red">积极</span></td></tr>
+        <tr><td>涨跌比</td><td class="text-c">~3900:2100</td><td><span class="tag tag-red">偏暖</span></td></tr>
+        <tr><td>两市成交额</td><td class="text-c">1.61万亿</td><td><span class="tag tag-gray">缩量观望</span></td></tr>
+        <tr><td>北向资金</td><td class="text-c">休市（清明）</td><td><span class="tag tag-amber">明日恢复</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box">
+      <strong>📊 市场情绪</strong>
+      <p><strong>中性偏好</strong>：节后首日三大指数全线收红，涨停93只明显增加，连板晋级率75%反映短线情绪积极。但成交缩量至1.61万亿，增量资金有限，后续需观察量能能否放大。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 第二章：热点板块复盘 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">2</div>
+    <div class="sec-title">热点板块复盘</div>
+  </div>
+  <div class="sec-body">
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">领涨板块 TOP6</h3>
+    <table>
+      <thead>
+        <tr><th>排名</th><th>板块名称</th><th class="text-c">涨停数</th><th>核心驱动</th><th>评级</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td><td><strong>化工（有机硅/草甘膦/大炼化）</strong></td>
+          <td class="text-c txt-up">20+只</td>
+          <td>中东冲突→沙特石化基地受袭；工信部《石化化工老旧装置更新改造行动方案》</td>
+          <td><span class="tag tag-red">最强主线</span></td>
+        </tr>
+        <tr>
+          <td>2</td><td>PCB/覆铜板概念</td>
+          <td class="text-c">多只</td>
+          <td>原材料涨价，需求回暖</td>
+          <td><span class="tag tag-blue">强势</span></td>
+        </tr>
+        <tr>
+          <td>3</td><td>体育产业链</td>
+          <td class="text-c">多只</td>
+          <td>午后异动，政策预期</td>
+          <td><span class="tag tag-blue">轮动</span></td>
+        </tr>
+        <tr>
+          <td>4</td><td>稀土永磁</td>
+          <td class="text-c">1只+</td>
+          <td>氧化镨钕价格周涨超6%，中科磁业+10%+</td>
+          <td><span class="tag tag-blue">强势</span></td>
+        </tr>
+        <tr>
+          <td>5</td><td>算力芯片/半导体</td>
+          <td class="text-c">活跃</td>
+          <td>寒武纪+10%+，超节点产品需求驱动</td>
+          <td><span class="tag tag-blue">主线延续</span></td>
+        </tr>
+        <tr>
+          <td>6</td><td>油气开采</td>
+          <td class="text-c">1只+</td>
+          <td>原油价格突破115美元/桶</td>
+          <td><span class="tag tag-amber">事件驱动</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">领跌板块</h3>
+    <table>
+      <thead><tr><th>板块</th><th>调整逻辑</th></tr></thead>
+      <tbody>
+        <tr><td>大金融（保险）</td><td>护盘任务完成后资金获利了结</td></tr>
+        <tr><td>创新药</td><td>节前强势板块短期承压，津药高位分歧</td></tr>
+        <tr><td>多元金融</td><td>跟随大盘调整</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 第三章：龙头股复盘 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">3</div>
+    <div class="sec-title">龙头股复盘</div>
+  </div>
+  <div class="sec-body">
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">连板高度梯队</h3>
+    <table>
+      <thead>
+        <tr><th>连板天数</th><th>股票名称</th><th>代码</th><th>所属板块</th><th>评级</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="text-c txt-up">14天7板</td><td><strong>大胜达</strong></td><td>603687</td><td>算力+包装+芯片</td><td><span class="tag tag-red">最高空间龙</span></td></tr>
+        <tr><td class="text-c txt-up">7天</td><td><strong>津药药业</strong></td><td>600488</td><td>创新药</td><td><span class="tag tag-red">最高板</span></td></tr>
+        <tr><td class="text-c">7天</td><td>鹭燕医药</td><td>002788</td><td>医药商业</td><td><span class="tag tag-blue">连板</span></td></tr>
+        <tr><td class="text-c">4天</td><td>华统股份</td><td>002840</td><td>养殖/猪肉收储</td><td><span class="tag tag-amber">政策催化</span></td></tr>
+        <tr><td class="text-c">4天</td><td>恒逸石化</td><td>000703</td><td>化工/大炼化</td><td><span class="tag tag-blue">化工龙头</span></td></tr>
+        <tr><td class="text-c txt-up">3天</td><td><strong>汇源通信</strong></td><td>000586</td><td>通信线缆</td><td><span class="tag tag-red">通信核心</span></td></tr>
+        <tr><td class="text-c txt-up">3天</td><td><strong>通鼎互联</strong></td><td>002491</td><td>通信线缆</td><td><span class="tag tag-red">通信核心</span></td></tr>
+        <tr><td class="text-c">3天</td><td>法尔胜</td><td>000890</td><td>通信线缆</td><td><span class="tag tag-blue">板块跟随</span></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">20CM 弹性先锋</h3>
+    <table>
+      <thead><tr><th>股票名称</th><th>代码</th><th class="text-c">涨跌幅</th><th>板块</th><th>核心逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>东岳硅材</strong></td><td>300821</td><td class="text-c txt-up">+20%</td><td>有机硅</td><td>化工龙头+季报预增397%-451%</td></tr>
+        <tr><td><strong>同宇新材</strong></td><td>301630</td><td class="text-c txt-up">+20%</td><td>PCB材料</td><td>覆铜板树脂龙头</td></tr>
+        <tr><td>凌玮科技</td><td>301373</td><td class="text-c txt-up">+20%</td><td>化工材料</td><td>次新股化工行情</td></tr>
+        <tr><td>寒武纪</td><td>688256</td><td class="text-c txt-up">+10%+</td><td>算力芯片</td><td>AI芯片龙头，超节点需求</td></tr>
+        <tr><td>中科磁业</td><td>301057</td><td class="text-c txt-up">+10%+</td><td>稀土永磁</td><td>氧化镨钕涨价</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 第四章：异动个股筛选 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">4</div>
+    <div class="sec-title">异动个股筛选（综合评分）</div>
+  </div>
+  <div class="sec-body">
+    <div class="insight-box" style="margin-bottom: 18px;">
+      <strong>📌 筛选标准</strong>
+      <p>流通市值 5-50亿 | 今日涨幅 >5% | 量比 >1.5 | 非ST股</p>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">
+      <span class="tag tag-red" style="margin-right:6px;">S级</span>强烈关注（综合评分 ≥100）
+    </h3>
+    <table style="margin-bottom:20px;">
+      <thead><tr><th>股票名称</th><th>代码</th><th class="text-c">涨跌幅</th><th>板块</th><th class="text-c">评分</th><th>核心逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>东岳硅材</strong></td><td>300821</td><td class="text-c txt-up">+20%</td><td>有机硅</td><td class="text-c txt-up">125分</td><td>化工板块龙头+20CM涨停+季报预增397%-451%</td></tr>
+        <tr><td><strong>津药药业</strong></td><td>600488</td><td class="text-c txt-up">+10%</td><td>创新药</td><td class="text-c txt-up">118分</td><td>7连板，市场最高标，创新药龙头</td></tr>
+        <tr><td><strong>大胜达</strong></td><td>603687</td><td class="text-c txt-up">涨停</td><td>算力+芯片</td><td class="text-c txt-up">115分</td><td>14天7板，算力主线核心标的</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">
+      <span class="tag tag-amber" style="margin-right:6px;">A级</span>重点跟踪（80-99分）
+    </h3>
+    <table style="margin-bottom:20px;">
+      <thead><tr><th>股票名称</th><th>代码</th><th class="text-c">涨跌幅</th><th>板块</th><th class="text-c">评分</th><th>核心逻辑</th></tr></thead>
+      <tbody>
+        <tr><td>同宇新材</td><td>301630</td><td class="text-c txt-up">+20%</td><td>PCB材料</td><td class="text-c txt-up">95分</td><td>化工+新材料双概念，20CM涨停</td></tr>
+        <tr><td>汇源通信</td><td>000586</td><td class="text-c txt-up">+10%</td><td>通信线缆</td><td class="text-c txt-up">90分</td><td>3连板，通信光纤主线延续</td></tr>
+        <tr><td>通鼎互联</td><td>002491</td><td class="text-c txt-up">+10%</td><td>通信线缆</td><td class="text-c txt-up">88分</td><td>3连板，通信线缆景气</td></tr>
+        <tr><td>鹭燕医药</td><td>002788</td><td class="text-c txt-up">+10%</td><td>医药商业</td><td class="text-c txt-up">85分</td><td>7天连板，医药商业龙头</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">
+      <span class="tag tag-blue" style="margin-right:6px;">B级</span>观察备选（60-79分）
+    </h3>
+    <table>
+      <thead><tr><th>股票名称</th><th>代码</th><th class="text-c">涨跌幅</th><th>板块</th><th class="text-c">评分</th><th>核心逻辑</th></tr></thead>
+      <tbody>
+        <tr><td>法尔胜</td><td>000890</td><td class="text-c txt-up">+10%</td><td>通信线缆</td><td class="text-c">75分</td><td>3连板，跟随通信板块</td></tr>
+        <tr><td>恒逸石化</td><td>000703</td><td class="text-c txt-up">+10%</td><td>大炼化</td><td class="text-c">72分</td><td>化工板块，4天3板</td></tr>
+        <tr><td>寒武纪</td><td>688256</td><td class="text-c txt-up">+10%+</td><td>算力芯片</td><td class="text-c">70分</td><td>AI芯片龙头，节后率先反弹</td></tr>
+        <tr><td>凌玮科技</td><td>301373</td><td class="text-c txt-up">+20%</td><td>化工材料</td><td class="text-c">68分</td><td>次新化工，20CM</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 第五章：蓄势异动分析 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">5</div>
+    <div class="sec-title">蓄势异动分析（启动前兆）</div>
+  </div>
+  <div class="sec-body">
+
+    <div class="insight-box">
+      <strong>💡 核心发现</strong>
+      <p><strong>① 化工板块罕见涨停潮</strong>：中东地缘冲突（沙特朱拜勒工业区受袭）和工信部《石化化工老旧装置更新改造行动方案》双重催化，化工板块20余只个股涨停，东岳硅材(+20%)、同宇新材(+20%)等弹性标的强势出击。</p>
+      <p><strong>② 通信线缆板块3连板梯队完整</strong>：汇源通信(000586)、通鼎互联(002491)、法尔胜(000890)形成3连板三角，板块效应强，或为近期持续性最强主线之一。</p>
+      <p><strong>③ 算力芯片自强逻辑延续</strong>：寒武纪+10%+、大胜达14天7板，AI硬件自强主线未结束，但高位标的注意分歧风险。</p>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">板块资金净流入排名</h3>
+    <table style="margin-bottom:20px;">
+      <thead><tr><th>排名</th><th>行业板块</th><th class="text-c">涨跌幅</th><th>蓄势评级</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>基础化工</strong></td><td class="text-c txt-up">大涨</td><td><span class="tag tag-red">强启动</span></td></tr>
+        <tr><td>2</td><td><strong>半导体</strong></td><td class="text-c txt-up">+1.42%</td><td><span class="tag tag-amber">趋势加速</span></td></tr>
+        <tr><td>3</td><td>电子</td><td class="text-c">偏强</td><td><span class="tag tag-blue">关注</span></td></tr>
+        <tr><td>↓</td><td>电新行业</td><td class="text-c txt-dn">净流出</td><td><span class="tag tag-gray">回避</span></td></tr>
+        <tr><td>↓</td><td>通信</td><td class="text-c txt-dn">净流出</td><td><span class="tag tag-gray">高位注意</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">蓄势启动信号分类</h3>
+
+    <div style="background:#FFF5F5; border-left:4px solid #FF4D4F; border-radius:0 8px 8px 0; padding:12px 16px; margin-bottom:12px;">
+      <strong style="color:#E53935;">🔴 强启动信号</strong>
+      <ul class="bullets">
+        <li><strong>东岳硅材（300821）</strong>：+20%涨停，一季度净利润预增397%-451%，化工板块最强弹性标的</li>
+        <li><strong>同宇新材（301630）</strong>：+20%涨停，PCB/覆铜板树脂龙头，受益于原材料涨价</li>
+        <li><strong>恒逸石化（000703）</strong>：+10%，大炼化4天3板，化工中军</li>
+      </ul>
+    </div>
+
+    <div style="background:#FFF8E1; border-left:4px solid #F59E0B; border-radius:0 8px 8px 0; padding:12px 16px; margin-bottom:12px;">
+      <strong style="color:#D97706;">🟡 趋势加速中</strong>
+      <ul class="bullets">
+        <li><strong>汇源通信（000586）</strong>：3连板，通信光纤+光通信双概念，板块效应完整</li>
+        <li><strong>通鼎互联（002491）</strong>：3连板，通信线缆景气延续</li>
+        <li><strong>法尔胜（000890）</strong>：3连板，跟随通信板块</li>
+      </ul>
+    </div>
+
+    <div style="background:#F0FFF4; border-left:4px solid #52C41A; border-radius:0 8px 8px 0; padding:12px 16px;">
+      <strong style="color:#2E7D32;">🟢 逆势反弹+修复</strong>
+      <ul class="bullets">
+        <li><strong>寒武纪（688256）</strong>：+10%+，AI芯片龙头，节后率先反弹，超节点需求驱动</li>
+        <li><strong>大胜达（603687）</strong>：算力主线+国产芯片14天7板，市场高度龙</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 第六章：明日操作建议 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">6</div>
+    <div class="sec-title">明日操作建议</div>
+  </div>
+  <div class="sec-body">
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">
+      <span class="tag tag-red" style="margin-right:6px;">激进</span>蓄势启动标的（可低吸）
+    </h3>
+    <ul class="bullets" style="margin-bottom:18px;">
+      <li><strong>东岳硅材（300821）</strong>：有机硅龙头+季报预增397-451%，若明日高开分歧可关注低吸机会，止损-5%</li>
+      <li><strong>汇源通信（000586）/ 通鼎互联（002491）</strong>：3连板，通信线缆板块梯队完整，明日高开回调介入</li>
+      <li><strong>同宇新材（301630）</strong>：化工+新材料双概念，20CM弹性，关注板块持续性</li>
+    </ul>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">
+      <span class="tag tag-amber" style="margin-right:6px;">高风险</span>连板龙头接力
+    </h3>
+    <ul class="bullets" style="margin-bottom:18px;">
+      <li><strong>大胜达（603687）</strong>：14天7板，市场最高空间龙，高位博弈，严格止损，不建议重仓</li>
+      <li><strong>津药药业（600488）</strong>：7连板创新药龙头，只做情绪观察，不建议追高，高位分歧风险极大</li>
+    </ul>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">
+      <span class="tag tag-gray" style="margin-right:6px;">观望</span>等待机会
+    </h3>
+    <ul class="bullets">
+      <li><strong>创新药板块</strong>：津药7连板高位，注意分歧对板块的拖累</li>
+      <li><strong>成交缩量</strong>：若明日量能无法放大，追高需谨慎</li>
+      <li><strong>北向资金</strong>：明日（4月8日）恢复交易，关注外资动向</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ====== 第七章：风险提示 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">7</div>
+    <div class="sec-title">风险提示</div>
+  </div>
+  <div class="sec-body">
+    <div class="risk-box">
+      <div class="title">⚠️ 系统性风险</div>
+      <ul style="list-style:none; padding:0;">
+        <li>▸ 中东地缘冲突持续演化，原油突破115美元/桶，通胀预期升温</li>
+        <li>▸ 特朗普关税最后期限（4月7日20时），外贸不确定性</li>
+        <li>▸ 北向资金明日恢复，可能对盘面产生短期扰动</li>
+      </ul>
+    </div>
+    <div class="risk-box">
+      <div class="title">⚠️ 板块退潮风险</div>
+      <ul style="list-style:none; padding:0;">
+        <li>▸ <strong>化工板块</strong>：今日20+只涨停，明日分化概率大，非核心标的注意退潮</li>
+        <li>▸ <strong>创新药</strong>：津药7连板高位，短期分歧拖累板块</li>
+        <li>▸ <strong>成交缩量</strong>：1.61万亿较节前缩量，增量资金有限</li>
+      </ul>
+    </div>
+    <div class="risk-box">
+      <div class="title">⚠️ 个股风险</div>
+      <ul style="list-style:none; padding:0;">
+        <li>▸ <strong>高位连板分歧</strong>：大胜达14天7板、津药7连板，高位接盘风险大</li>
+        <li>▸ <strong>次新股波动</strong>：凌玮科技、同宇新材等次新化工，振幅剧烈</li>
+        <li>▸ <strong>新规影响</strong>：4月7日起证监会短线交易新规+程序化交易细则生效</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 第八章：仓位建议 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">8</div>
+    <div class="sec-title">仓位建议</div>
+  </div>
+  <div class="sec-body">
+    <div style="margin-bottom:16px;">
+      <span style="display:inline-block; background:#EBF2FA; color:#1A2E5C; padding:6px 16px; border-radius:20px; font-weight:700; font-size:15px;">
+        当前市场评级：<span style="color:#2E7DFF;">中性偏好</span>
+      </span>
+      <span style="margin-left:12px; color:#666; font-size:14px;">节后情绪回暖，结构性机会可期</span>
+    </div>
+
+    <div class="position-box">
+      <div class="pos-card normal">
+        <div class="pos-label">建议仓位</div>
+        <div class="pos-val">40%-50%</div>
+        <div class="pos-lbl">较节前30-40%适度提升</div>
+      </div>
+      <div class="pos-card best">
+        <div class="pos-label">聚焦方向</div>
+        <div class="pos-val" style="font-size:20px;">化工·通信·算力</div>
+        <div class="pos-lbl">主线龙头，精选标的</div>
+      </div>
+      <div class="pos-card caution">
+        <div class="pos-label">风险控制</div>
+        <div class="pos-val" style="font-size:20px;">严格止损</div>
+        <div class="pos-lbl">高位连板不追，分歧低吸</div>
+      </div>
+    </div>
+
+    <div class="insight-box" style="margin-top:16px;">
+      <strong>📊 核心逻辑</strong>
+      <p>节后首日情绪回暖，涨停93只较节前明显增加，短线机会增多。但成交额缩量至1.61万亿，增量资金有限，建议聚焦化工龙头、通信线缆等主线方向，控制仓位，止损纪律严格执行。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 第九章：节后重点关注 ====== -->
+<div class="section">
+  <div class="sec-hdr">
+    <div class="sec-num">9</div>
+    <div class="sec-title">节后重点关注</div>
+  </div>
+  <div class="sec-body">
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">关键时间节点</h3>
+    <ul class="bullets" style="margin-bottom:16px;">
+      <li><strong>4月8日（周三）</strong>：北向资金恢复交易，关注外资动向；特朗普关税最后期限结果揭晓</li>
+      <li><strong>4月中旬</strong>：一季度财报密集披露，业绩超预期标的或有超额收益</li>
+      <li><strong>4月下旬</strong>：中东局势进一步明朗，关注原油价格走势</li>
+    </ul>
+
+    <h3 style="font-size:15px; font-weight:700; color:#1A2E5C; margin-bottom:10px;">重点板块预判</h3>
+    <table>
+      <thead><tr><th>板块</th><th>逻辑</th><th>关注标的</th></tr></thead>
+      <tbody>
+        <tr><td><strong>化工板块</strong></td><td>中东+政策双催化，短期延续强势</td><td>东岳硅材、同宇新材、恒逸石化</td></tr>
+        <tr><td><strong>通信线缆/光纤</strong></td><td>3连板梯队完整，板块效应强</td><td>汇源通信、通鼎互联、法尔胜</td></tr>
+        <tr><td><strong>算力芯片</strong></td><td>AI自强主线未结束，精选低位</td><td>寒武纪、大胜达</td></tr>
+        <tr><td><strong>猪肉收储</strong></td><td>第二批中央冻猪肉收储政策</td><td>华统股份</td></tr>
+        <tr><td><strong>稀土永磁</strong></td><td>氧化镨钕涨价周涨超6%</td><td>中科磁业</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 底部装饰 -->
+<div class="footer-bar"></div>
+<footer class="footer">
+  <p><strong>AI量化复盘平台</strong> · 每个交易日16:00自动更新</p>
+  <p>数据来源：东方财富 · 财联社 · 同花顺 · 每日经济新闻 &nbsp;|&nbsp; 生成时间：2026-04-07 16:00</p>
+  <p style="margin-top:8px; color:#B0BEC5;">本站内容仅供参考，不构成投资建议。股市有风险，投资需谨慎。</p>
+</footer>
+
+</div>
+</body>
+</html>
