@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日早盘简报 - 2025年4月7日</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --border-color: #30363d;
+            --up-color: #ff4d4d;
+            --down-color: #00c853;
+            --accent-color: #58a6ff;
+            --warning-color: #f85149;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: linear-gradient(135deg, #1a1f2e 0%, #0d1117 100%);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .nav-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* 头部区域 */
+        .hero {
+            background: linear-gradient(135deg, #1a1f2e 0%, #0d1117 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #58a6ff, #a371f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* 主要内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* 指数卡片 */
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .index-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .index-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        
+        .index-name {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .index-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        
+        .index-change {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .up { color: var(--up-color); }
+        .down { color: var(--down-color); }
+        
+        /* 板块区域 */
+        .section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .section-icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+        }
+        
+        .section h2 {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+        }
+        
+        /* 板块卡片 */
+        .sector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .sector-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+        
+        .sector-card:hover {
+            border-color: var(--accent-color);
+        }
+        
+        .sector-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .sector-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .sector-tag {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+        
+        .sector-logic {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        /* 龙头股表格 */
+        .stock-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .stock-table th {
+            text-align: left;
+            padding: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .stock-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .stock-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .stock-type {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .type-leader { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .type-emotion { background: rgba(233, 30, 99, 0.2); color: #e91e63; }
+        .type-gain { background: rgba(0, 200, 83, 0.2); color: #00c853; }
+        
+        /* 新闻列表 */
+        .news-list {
+            list-style: none;
+        }
+        
+        .news-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-number {
+            background: var(--accent-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .news-content {
+            flex: 1;
+        }
+        
+        .news-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .news-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        /* 操作建议 */
+        .advice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .advice-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .advice-card h4 {
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+        
+        .advice-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .advice-card li {
+            padding: 0.4rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+            font-size: 0.9rem;
+        }
+        
+        .advice-card li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+        
+        /* 风险提示 */
+        .warning-box {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid var(--warning-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .warning-box h4 {
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* 页脚 */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        .footer-links {
+            margin-top: 1rem;
+        }
+        
+        .footer-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .sector-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">📈 每日早盘简报</div>
+            <div class="nav-date">2025年4月7日 星期二</div>
+        </div>
+    </nav>
+
+    <!-- 头部区域 -->
+    <header class="hero">
+        <h1>每日早盘简报</h1>
+        <p class="subtitle">把握市场脉搏，洞察投资机会</p>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="container">
+        <!-- 外盘指数 -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">🌍</span>
+                <h2>隔夜外盘</h2>
+            </div>
+            <div class="index-grid">
+                <div class="index-card">
+                    <div class="index-name">道琼斯工业指数</div>
+                    <div class="index-value up">+0.36%</div>
+                    <div class="index-change up">↗ 收涨</div>
+                </div>
+                <div class="index-card">
+                    <div class="index-name">纳斯达克指数</div>
+                    <div class="index-value up">+0.54%</div>
+                    <div class="index-change up">↗ 四连涨</div>
+                </div>
+                <div class="index-card">
+                    <div class="index-name">标普500指数</div>
+                    <div class="index-value up">+0.44%</div>
+                    <div class="index-change up">↗ 收涨</div>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-top: 1rem;">
+                <strong>中概股：</strong>纳斯达克中国金龙指数近期波动较大，受中美贸易关系影响。美股三大指数集体收涨，纳指和标普连涨四日。
+                3月非农就业人数增加17.8万人，远超预期的6.5万人。
+            </p>
+        </section>
+
+        <!-- 政策催化 -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">📢</span>
+                <h2>政策/事件催化</h2>
+            </div>
+            <div class="news-list">
+                <div class="news-item">
+                    <span class="news-number">1</span>
+                    <div class="news-content">
+                        <div class="news-title">证监会支持民营企业做强做优做大</div>
+                        <div class="news-meta">重点服务集成电路、新能源汽车、智能制造、新材料、商业航天、网络经济等领域</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">2</span>
+                    <div class="news-content">
+                        <div class="news-title">程序化交易监管新规出台</div>
+                        <div class="news-meta">沪深北交易所发布实施细则，7月7日起施行，明确高频交易标准</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">3</span>
+                    <div class="news-content">
+                        <div class="news-title">中重稀土出口管制</div>
+                        <div class="news-meta">商务部对钐、钆、铽等7类中重稀土物项实施出口管制</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 重点板块 -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">🎯</span>
+                <h2>重点板块与个股</h2>
+            </div>
+            <div class="sector-grid">
+                <!-- 板块1 -->
+                <div class="sector-card">
+                    <div class="sector-header">
+                        <span class="sector-name">🔥 贸易战/自主可控</span>
+                        <span class="sector-tag">最强主线</span>
+                    </div>
+                    <p class="sector-logic">美国对华加征34%关税，累计税率达54%；中方对美全部进口商品加征34%关税反制</p>
+                    <table class="stock-table">
+                        <tr>
+                            <th>类型</th>
+                            <th>个股</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-leader">行业龙头</span></td>
+                            <td>北方华创</td>
+                            <td>半导体设备龙头</td>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-emotion">情绪龙头</span></td>
+                            <td>中国稀土</td>
+                            <td>稀土反制核心</td>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-gain">领涨龙头</span></td>
+                            <td>登海种业</td>
+                            <td>农业反制受益</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- 板块2 -->
+                <div class="sector-card">
+                    <div class="sector-header">
+                        <span class="sector-name">💊 医药生物</span>
+                        <span class="sector-tag">政策利好</span>
+                    </div>
+                    <p class="sector-logic">四川省出台创新药临床应用支持政策；药品集采政策优化预期</p>
+                    <table class="stock-table">
+                        <tr>
+                            <th>类型</th>
+                            <th>个股</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-leader">行业龙头</span></td>
+                            <td>恒瑞医药</td>
+                            <td>创新药龙头</td>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-emotion">情绪龙头</span></td>
+                            <td>回盛生物</td>
+                            <td>动物保健+涨价</td>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-gain">领涨龙头</span></td>
+                            <td>多瑞医药</td>
+                            <td>创业板医药活跃</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- 板块3 -->
+                <div class="sector-card">
+                    <div class="sector-header">
+                        <span class="sector-name">⛏️ 资源涨价</span>
+                        <span class="sector-tag">涨价概念</span>
+                    </div>
+                    <p class="sector-logic">有色金属、小金属、化工品价格上行，锑、钨、钼、锡等涨幅显著</p>
+                    <table class="stock-table">
+                        <tr>
+                            <th>类型</th>
+                            <th>个股</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-leader">行业龙头</span></td>
+                            <td>中毅达</td>
+                            <td>季戊四醇龙头</td>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-emotion">情绪龙头</span></td>
+                            <td>红宝丽</td>
+                            <td>环氧丙烷涨价</td>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-gain">领涨龙头</span></td>
+                            <td>回盛生物</td>
+                            <td>泰乐菌素涨价</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- 板块4 -->
+                <div class="sector-card">
+                    <div class="sector-header">
+                        <span class="sector-name">⚛️ 可控核聚变</span>
+                        <span class="sector-tag">科技突破</span>
+                    </div>
+                    <p class="sector-logic">"中国环流三号"实现亿摄氏度等离子体运行；上海未来产业基金战略投资</p>
+                    <table class="stock-table">
+                        <tr>
+                            <th>类型</th>
+                            <th>个股</th>
+                            <th>说明</th>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-leader">行业龙头</span></td>
+                            <td>西部超导</td>
+                            <td>超导材料</td>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-emotion">情绪龙头</span></td>
+                            <td>兰石重装</td>
+                            <td>低温设备</td>
+                        </tr>
+                        <tr>
+                            <td><span class="stock-type type-gain">领涨龙头</span></td>
+                            <td>合锻智能</td>
+                            <td>真空系统</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 重要新闻 -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">📰</span>
+                <h2>重要新闻摘要 TOP10</h2>
+            </div>
+            <div class="news-list">
+                <div class="news-item">
+                    <span class="news-number">1</span>
+                    <div class="news-content">
+                        <div class="news-title">央行开展8000亿元逆回购操作</div>
+                        <div class="news-meta">3个月期，维持流动性充裕 | 财经要闻</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">2</span>
+                    <div class="news-content">
+                        <div class="news-title">成品油调价窗口开启，预计每吨上调约130元</div>
+                        <div class="news-meta">年内第六次上涨 | 财经要闻</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">3</span>
+                    <div class="news-content">
+                        <div class="news-title">地方债发行规模创新高，已超2.84万亿元</div>
+                        <div class="news-meta">置换隐性债务再融资专项债达全年额度近七成 | 财经要闻</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">4</span>
+                    <div class="news-content">
+                        <div class="news-title">指数增强基金热潮，年内52只产品上报</div>
+                        <div class="news-meta">同比增长206%，创历史同期最高 | 财经要闻</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">5</span>
+                    <div class="news-content">
+                        <div class="news-title">国家电网Q1投资同比增长27.7%</div>
+                        <div class="news-meta">全年计划投资超6500亿元 | 产业动态</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">6</span>
+                    <div class="news-content">
+                        <div class="news-title">钠离子电池安全突破</div>
+                        <div class="news-meta">中科院全球首次在安时级钠离子电池中彻底阻断热失控 | 科技</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">7</span>
+                    <div class="news-content">
+                        <div class="news-title">氢燃料航空发动机首飞成功</div>
+                        <div class="news-meta">中国航发兆瓦级氢燃料涡桨发动机AEP100成功首飞 | 科技</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">8</span>
+                    <div class="news-content">
+                        <div class="news-title">OpenAI预告新品发布</div>
+                        <div class="news-meta">数周内发布O3、O4-mini，数月内发布GPT-5 | 科技</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">9</span>
+                    <div class="news-content">
+                        <div class="news-title">新能源车3月零售数据</div>
+                        <div class="news-meta">零售78.4万辆，同比下降21%，环比增长69% | 产业数据</div>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <span class="news-number">10</span>
+                    <div class="news-content">
+                        <div class="news-title">美伊紧张局势升级</div>
+                        <div class="news-meta">特朗普要求伊朗在美东时间4月7日20时前"投降" | 国际局势</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 操作建议 -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">💡</span>
+                <h2>今日操作建议</h2>
+            </div>
+            <div class="advice-grid">
+                <div class="advice-card">
+                    <h4>🎯 整体思路</h4>
+                    <ul>
+                        <li>关注反制主线：稀土、农业、战略金属</li>
+                        <li>自主可控方向：半导体、国产软件、国防军工</li>
+                        <li>防御配置：医药、银行、公用事业</li>
+                        <li>涨价概念：资源品、化工品受益标的</li>
+                    </ul>
+                </div>
+                <div class="advice-card">
+                    <h4>📊 仓位建议</h4>
+                    <ul>
+                        <li><strong>激进型：</strong>60%-70%</li>
+                        <li><strong>稳健型：</strong>40%-50%</li>
+                        <li><strong>保守型：</strong>20%-30%</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="warning-box">
+                <h4>⚠️ 风险提示</h4>
+                <ul>
+                    <li>中美贸易摩擦升级，市场波动可能加大</li>
+                    <li>美国关税政策不确定性</li>
+                    <li>地缘政治风险（中东局势）</li>
+                    <li>多家公司被ST或立案调查，注意回避业绩暴雷个股</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>📈 每日早盘简报 | 生成时间：2025年4月7日 08:50</p>
+        <p>数据来源：财联社、新浪财经、东方财富、Wind</p>
+        <div class="footer-links">
+            <a href="#">历史简报</a>
+            <a href="#">复盘报告</a>
+            <a href="#">关于我们</a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.75rem;">免责声明：本简报仅供参考，不构成投资建议。投资有风险，入市需谨慎。</p>
+    </footer>
+</body>
+</html>
