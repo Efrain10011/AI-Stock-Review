@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日复盘报告 · 2026年4月9日 · AI量化复盘</title>
+<style>
+:root {
+  --deep-blue: #0A1628;
+  --navy: #0D1B3E;
+  --med-blue: #1A2E5C;
+  --accent: #2E7DFF;
+  --accent-light: #EBF2FA;
+  --bg-white: #FFFFFF;
+  --bg-cream: #F5F7FA;
+  --bg-card: #EEF2F7;
+  --text-primary: #1A202C;
+  --text-secondary: #4A5568;
+  --text-muted: #8896AB;
+  --border: #DFE4EC;
+  --red: #E53935;
+  --red-bg: #FFF0F0;
+  --green: #00B54B;
+  --green-bg: #EDF7ED;
+  --amber: #F59E0B;
+  --amber-bg: #FFF8E1;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", -apple-system, sans-serif;
+  background: var(--bg-cream);
+  color: var(--text-primary);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 顶部色带 */
+.top-bar { height: 4px; background: linear-gradient(90deg, var(--deep-blue), var(--accent), var(--navy)); }
+
+/* 页眉 */
+.page-header {
+  background: linear-gradient(135deg, var(--deep-blue) 0%, var(--navy) 60%, #162952 100%);
+  padding: 48px 32px 56px;
+  position: relative; overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute; top: -40%; right: -15%; width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(46,125,255,0.12) 0%, transparent 70%); border-radius: 50%;
+}
+.page-header::after {
+  content: ''; position: absolute; bottom: -30%; left: -8%; width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(0,188,212,0.07) 0%, transparent 70%); border-radius: 50%;
+}
+.header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+.report-title { font-size: 30px; font-weight: 800; color: white; margin-bottom: 6px; letter-spacing: 1px; }
+.report-subtitle { color: rgba(255,255,255,0.5); font-size: 14px; }
+.report-date-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(46,125,255,0.25); color: #7EB8FF;
+  padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  margin-top: 16px; border: 1px solid rgba(46,125,255,0.2);
+}
+
+/* KPI卡片行 */
+.kpi-section { max-width: 1100px; margin: -32px auto 0; padding: 0 24px; position: relative; z-index: 2; }
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.kpi-card {
+  background: white; border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 22px 20px;
+  border: 1px solid var(--border); text-align: center;
+  transition: all 0.2s ease;
+}
+.kpi-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+.kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px; }
+.kpi-value { font-size: 26px; font-weight: 800; color: var(--text-primary); line-height: 1.2; }
+.kpi-change { font-size: 14px; font-weight: 700; margin-top: 4px; display: inline-block; }
+.kpi-up { color: var(--red); }
+.kpi-down { color: var(--green); }
+
+/* 主内容 */
+.main-content { max-width: 1100px; margin: 32px auto 0; padding: 0 24px 60px; }
+
+/* 章节样式 */
+.chapter {
+  background: white; border-radius: var(--radius); margin-bottom: 24px;
+  box-shadow: var(--shadow); border: 1px solid transparent; overflow: hidden;
+  transition: all 0.2s ease;
+}
+.chapter:hover { box-shadow: var(--shadow-lg); border-color: rgba(46,125,255,0.15); }
+.chapter-header {
+  padding: 18px 24px; border-bottom: 1px solid var(--bg-cream);
+  display: flex; align-items: center; gap: 10px;
+  background: var(--accent-light);
+}
+.chapter-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.chapter-title { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+.chapter-body { padding: 22px 24px; }
+
+/* 表格 */
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table thead th {
+  background: var(--med-blue); color: white; padding: 10px 14px;
+  text-align: left; font-weight: 600; font-size: 13px;
+  border: none;
+}
+.data-table thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+.data-table thead th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+.data-table tbody td {
+  padding: 10px 14px; border-bottom: 1px solid var(--bg-cream);
+  color: var(--text-secondary);
+}
+.data-table tbody tr:nth-child(even) { background: var(--bg-cream); }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--accent-light); }
+.data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table .up { color: var(--red); font-weight: 600; }
+.data-table .down { color: var(--green); font-weight: 600; }
+
+/* 标签 */
+.tag { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.tag-red { background: var(--red-bg); color: var(--red); }
+.tag-green { background: var(--green-bg); color: var(--green); }
+.tag-amber { background: var(--amber-bg); color: var(--amber); }
+.tag-blue { background: #EBF4FF; color: #2563EB; }
+
+/* 洞察框 */
+.insight-box {
+  background: #F0F7FF; border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 14px 18px; margin-top: 16px; font-size: 14px; color: var(--text-secondary);
+}
+.insight-box strong { color: var(--accent); }
+
+/* 要点列表 */
+.bullet-list { list-style: none; padding: 0; }
+.bullet-list li {
+  padding: 8px 0 8px 28px; position: relative;
+  border-bottom: 1px solid var(--bg-cream); font-size: 14px; color: var(--text-secondary);
+}
+.bullet-list li:last-child { border-bottom: none; }
+.bullet-list li::before {
+  content: '•'; position: absolute; left: 10px; color: var(--accent);
+  font-weight: 700; font-size: 18px; top: 6px;
+}
+
+/* 评分卡片 */
+.score-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
+.score-card {
+  background: var(--bg-cream); border-radius: var(--radius-sm);
+  padding: 16px 18px; border-left: 4px solid var(--accent);
+}
+.score-card.s-red { border-left-color: var(--red); background: var(--red-bg); }
+.score-card.s-amber { border-left-color: var(--amber); background: var(--amber-bg); }
+.score-card.s-blue { border-left-color: #2563EB; background: #EBF4FF; }
+.score-name { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.score-code { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.score-reason { font-size: 13px; color: var(--text-secondary); }
+.score-action { font-size: 12px; font-weight: 600; margin-top: 8px; color: var(--accent); }
+
+/* 情绪指示器 */
+.emotion-bar {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 16px;
+}
+.emotion-pill {
+  padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  background: var(--bg-cream); color: var(--text-secondary);
+}
+.emotion-pill.active { background: var(--accent); color: white; }
+
+/* 仓位建议 */
+.position-box {
+  display: grid; grid-template-columns: 1fr 2fr; gap: 20px;
+  background: linear-gradient(135deg, #F0F7FF, #E8F4FF);
+  border-radius: var(--radius); padding: 24px;
+  border: 1px solid rgba(46,125,255,0.15);
+}
+.position-label { font-size: 14px; color: var(--text-muted); margin-bottom: 6px; }
+.position-value { font-size: 42px; font-weight: 800; color: var(--accent); line-height: 1; }
+.position-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+/* 风险提示 */
+.risk-box {
+  background: #FFF8F8; border-left: 4px solid var(--red);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 14px 18px; font-size: 14px; color: var(--text-secondary);
+}
+.risk-box strong { color: var(--red); }
+
+/* 页脚 */
+.footer-bar { height: 3px; background: linear-gradient(90deg, var(--navy), var(--accent), var(--navy)); margin-top: 40px; }
+.page-footer { background: var(--deep-blue); color: rgba(255,255,255,0.35); padding: 24px 32px; text-align: center; font-size: 13px; }
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .kpi-value { font-size: 22px; }
+  .page-header { padding: 32px 20px 40px; }
+  .chapter-body { padding: 16px; }
+  .position-box { grid-template-columns: 1fr; }
+  .score-cards { grid-template-columns: 1fr; }
+  .data-table { font-size: 12px; }
+  .data-table thead th, .data-table tbody td { padding: 8px 10px; }
+}
+
+/* 打印样式 */
+@media print {
+  .top-bar, .footer-bar { display: none; }
+  body { background: white; }
+  .chapter { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  .page-footer { color: #666; background: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<!-- 页眉 -->
+<header class="page-header">
+  <div class="header-inner">
+    <div class="report-title">📊 每日复盘报告</div>
+    <div class="report-subtitle">AI量化复盘 · 智能选股 · 资金流向追踪</div>
+    <div class="report-date-badge">📅 数据日期：2026年4月9日（周四收盘） · 生成于18:00</div>
+  </div>
+</header>
+
+<!-- KPI指数卡片 -->
+<div class="kpi-section">
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">上证指数</div>
+      <div class="kpi-value">3967.23</div>
+      <div class="kpi-change kpi-down">▼ -0.72%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">深证成指</div>
+      <div class="kpi-value">13996.90</div>
+      <div class="kpi-change kpi-down">▼ -0.33%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">创业板指</div>
+      <div class="kpi-value">3303.12</div>
+      <div class="kpi-change kpi-down">▼ -0.73%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">两市成交额</div>
+      <div class="kpi-value">2.15万亿</div>
+      <div class="kpi-change kpi-down">缩量3033亿</div>
+    </div>
+  </div>
+</div>
+
+<!-- 主内容 -->
+<main class="main-content">
+
+  <!-- 第1章：市场环境 -->
+  <section class="chapter">
+    <div class="chapter-header">
+      <span class="chapter-num">1</span>
+      <span class="chapter-title">📈 市场环境复盘</span>
+    </div>
+    <div class="chapter-body">
+      <div class="emotion-bar">
+        <span class="emotion-pill active">涨停 53家</span>
+        <span class="emotion-pill">跌停 —</span>
+        <span class="emotion-pill">封板率 63.10%</span>
+        <span class="emotion-pill">涨跌比 ≈1:5</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>指数</th>
+            <th class="num">昨收</th>
+            <th class="num">今收</th>
+            <th class="num">涨跌幅</th>
+            <th>点评</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>上证指数</td>
+            <td class="num">3995.00</td>
+            <td class="num">3967.23</td>
+            <td class="num down">-0.72%</td>
+            <td>失守4000点，获利回吐</td>
+          </tr>
+          <tr>
+            <td>深证成指</td>
+            <td class="num">14042.50</td>
+            <td class="num">13996.90</td>
+            <td class="num down">-0.33%</td>
+            <td>相对抗跌</td>
+          </tr>
+          <tr>
+            <td>创业板指</td>
+            <td class="num">3347.61</td>
+            <td class="num">3303.12</td>
+            <td class="num down">-0.73%</td>
+            <td>科技成长回调明显</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="insight-box">
+        <strong>情绪解读：</strong>昨日暴涨后今日正常回调，获利盘回吐明显。涨停家数下降至53家（昨日135家），封板率63%属正常范围，非系统性风险信号。成交额缩量约3033亿属正常洗盘。
+      </div>
+    </div>
+  </section>
+
+  <!-- 第2章：热点板块 -->
+  <section class="chapter">
+    <div class="chapter-header">
+      <span class="chapter-num">2</span>
+      <span class="chapter-title">🔥 热点板块复盘</span>
+    </div>
+    <div class="chapter-body">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>板块名称</th>
+            <th>代表个股</th>
+            <th>驱动事件</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>铜缆高速连接</td>
+            <td>光迅科技(+10%)、特发信息(+10%)</td>
+            <td>AI算力基础设施需求爆发</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>油气开采及服务</td>
+            <td>—</td>
+            <td>地缘政治紧张+运价暴涨</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>光纤概念</td>
+            <td>长飞光纤(+10%)</td>
+            <td>光通信高景气+出口数据向好</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>光刻机/光刻胶</td>
+            <td>—</td>
+            <td>半导体自主可控政策催化</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>CPO（共封装光学）</td>
+            <td>—</td>
+            <td>光模块技术升级趋势</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>稀土永磁</td>
+            <td>—</td>
+            <td>稀土出口管制政策</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>国防军工</td>
+            <td>航天电器(+10%)、航天机电(+5.93%)</td>
+            <td>订单预期+政策支持</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>深海科技</td>
+            <td>巨力索具(+10.02%)</td>
+            <td>海洋经济战略</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="insight-box">
+        <strong>核心主线：</strong>光通信产业链（光纤→光模块→CPO→PCB）全面爆发，深海科技持续活跃，国防军工资金异动明显。
+      </div>
+    </div>
+  </section>
+
+  <!-- 第3章：龙头股 -->
+  <section class="chapter">
+    <div class="chapter-header">
+      <span class="chapter-num">3</span>
+      <span class="chapter-title">🐉 龙头股复盘</span>
+    </div>
+    <div class="chapter-body">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--text-primary);">连板高度梯队</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>连板数</th>
+            <th>股票名称</th>
+            <th>代码</th>
+            <th>概念</th>
+            <th>封板强度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-red">5连板</span></td>
+            <td>汇源通信</td>
+            <td>000586</td>
+            <td>光通信+AI算力</td>
+            <td>一字板</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-amber">4连板</span></td>
+            <td>中安科</td>
+            <td>600654</td>
+            <td>AI安防</td>
+            <td>T字板</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">3连板</span></td>
+            <td>金陵药业</td>
+            <td>000919</td>
+            <td>医药+深海</td>
+            <td>换手板</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">3连板</span></td>
+            <td>中工国际</td>
+            <td>002051</td>
+            <td>工程+深海</td>
+            <td>换手板</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:15px;font-weight:700;margin:20px 0 12px;color:var(--text-primary);">20CM弹性先锋（今日涨停）</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>股票名称</th>
+            <th>代码</th>
+            <th>概念</th>
+            <th class="num">主力净流入</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>巨力索具</td>
+            <td>002342</td>
+            <td>深海科技+军工</td>
+            <td class="num up">+12.55亿</td>
+          </tr>
+          <tr>
+            <td>光迅科技</td>
+            <td>002281</td>
+            <td>光通信+CPO</td>
+            <td class="num up">+9.29亿</td>
+          </tr>
+          <tr>
+            <td>航天电器</td>
+            <td>002025</td>
+            <td>国防军工</td>
+            <td class="num up">+4.48亿</td>
+          </tr>
+          <tr>
+            <td>特发信息</td>
+            <td>000070</td>
+            <td>光通信+军工</td>
+            <td class="num up">+3.36亿</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 第4章：异动个股 -->
+  <section class="chapter">
+    <div class="chapter-header">
+      <span class="chapter-num">4</span>
+      <span class="chapter-title">⭐ 异动个股筛选（综合评分）</span>
+    </div>
+    <div class="chapter-body">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;"><span class="tag tag-red" style="margin-right:8px;">S级</span>强烈关注</h3>
+      <div class="score-cards">
+        <div class="score-card s-red">
+          <div class="score-name">光迅科技</div>
+          <div class="score-code">002281 · 光通信+CPO</div>
+          <div class="score-reason">光通信龙头+主力净流入9.29亿+CPO主线共振，涨停突破新高</div>
+          <div class="score-action">→ 回调5日线低吸</div>
+        </div>
+        <div class="score-card s-red">
+          <div class="score-name">航天电器</div>
+          <div class="score-code">002025 · 国防军工</div>
+          <div class="score-reason">国防军工+主力净流入4.48亿+卫星题材，底部首板启动</div>
+          <div class="score-action">→ 回踩10日线布局</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:15px;font-weight:700;margin:20px 0 12px;"><span class="tag tag-amber" style="margin-right:8px;">A级</span>重点跟踪</h3>
+      <div class="score-cards">
+        <div class="score-card s-amber">
+          <div class="score-name">立讯精密</div>
+          <div class="score-code">002475 · 消费电子</div>
+          <div class="score-reason">苹果链龙头+主力净流入12.16亿+消费电子复苏预期</div>
+          <div class="score-action">→ 5日线支撑低吸</div>
+        </div>
+        <div class="score-card s-amber">
+          <div class="score-name">巨力索具</div>
+          <div class="score-code">002342 · 深海科技</div>
+          <div class="score-reason">主力净流入12.55亿（今日最强），深海+军工双催化</div>
+          <div class="score-action">→ 明日缩量回调可入</div>
+        </div>
+        <div class="score-card s-amber">
+          <div class="score-name">寒武纪</div>
+          <div class="score-code">688256 · AI芯片</div>
+          <div class="score-reason">AI算力芯片国产替代+主力净流入9.07亿</div>
+          <div class="score-action">→ 波动大，止损8%</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:15px;font-weight:700;margin:20px 0 12px;"><span class="tag tag-blue" style="margin-right:8px;">B级</span>观察备选</h3>
+      <div class="score-cards">
+        <div class="score-card s-blue">
+          <div class="score-name">海王生物</div>
+          <div class="score-code">000078 · 医药生物</div>
+          <div class="score-reason">底部首板+主力净流入5.95亿，底部启动</div>
+          <div class="score-action">→ 轻仓试探</div>
+        </div>
+        <div class="score-card s-blue">
+          <div class="score-name">天通股份</div>
+          <div class="score-code">600330 · AI材料</div>
+          <div class="score-reason">主力净流入6.08亿，突破新高</div>
+          <div class="score-action">→ 明日确认可入</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第5章：蓄势异动 -->
+  <section class="chapter">
+    <div class="chapter-header">
+      <span class="chapter-num">5</span>
+      <span class="chapter-title">🚀 蓄势异动分析（启动前兆）</span>
+    </div>
+    <div class="chapter-body">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;">主力净流入TOP10个股</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>名称</th>
+            <th>代码</th>
+            <th class="num">收盘价</th>
+            <th class="num">涨跌幅</th>
+            <th class="num">主力净流入</th>
+            <th>板块</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td><td>巨力索具</td><td>002342</td><td class="num">15.59</td><td class="num up">+10.02%</td><td class="num up">+12.55亿</td><td>深海/军工</td>
+          </tr>
+          <tr>
+            <td>2</td><td>立讯精密</td><td>002475</td><td class="num">55.09</td><td class="num up">+5.40%</td><td class="num up">+12.16亿</td><td>消费电子</td>
+          </tr>
+          <tr>
+            <td>3</td><td>光迅科技</td><td>002281</td><td class="num">108.09</td><td class="num up">+10.00%</td><td class="num up">+9.29亿</td><td>光通信</td>
+          </tr>
+          <tr>
+            <td>4</td><td>寒武纪</td><td>688256</td><td class="num">1198.00</td><td class="num up">+2.92%</td><td class="num up">+9.07亿</td><td>AI芯片</td>
+          </tr>
+          <tr>
+            <td>5</td><td>中兴通讯</td><td>000063</td><td class="num">35.56</td><td class="num up">+4.47%</td><td class="num up">+7.20亿</td><td>通信/5G</td>
+          </tr>
+          <tr>
+            <td>6</td><td>天通股份</td><td>600330</td><td class="num">19.70</td><td class="num up">+9.99%</td><td class="num up">+6.08亿</td><td>电子材料</td>
+          </tr>
+          <tr>
+            <td>7</td><td>海王生物</td><td>000078</td><td class="num">3.84</td><td class="num up">+10.03%</td><td class="num up">+5.95亿</td><td>医药</td>
+          </tr>
+          <tr>
+            <td>8</td><td>浪潮信息</td><td>000977</td><td class="num">65.07</td><td class="num up">+3.81%</td><td class="num up">+5.65亿</td><td>AI服务器</td>
+          </tr>
+          <tr>
+            <td>9</td><td>天孚通信</td><td>300394</td><td class="num">346.90</td><td class="num up">+2.94%</td><td class="num up">+5.17亿</td><td>光模块</td>
+          </tr>
+          <tr>
+            <td>10</td><td>航天电器</td><td>002025</td><td class="num">78.22</td><td class="num up">+10.00%</td><td class="num up">+4.48亿</td><td>军工</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:15px;font-weight:700;margin:20px 0 12px;">蓄势启动分类</h3>
+      <div class="score-cards">
+        <div class="score-card s-red">
+          <div class="score-name">🔴 强启动信号</div>
+          <div class="score-code">突破型 · 建议积极关注</div>
+          <div class="score-reason">• 光迅科技(002281)：涨停突破新高，主力净流入9.29亿<br>• 巨力索具(002342)：涨停+主力12.55亿，深海+军工双催化<br>• 航天电器(002025)：国防军工底部首板涨停</div>
+        </div>
+        <div class="score-card s-amber">
+          <div class="score-name">🟡 趋势加速中</div>
+          <div class="score-code">趋势型 · 回踩均线低吸</div>
+          <div class="score-reason">• 长飞光纤(601869)：光通信景气，10连涨后继续涨停<br>• 寒武纪(688256)：AI芯片国产替代，长期趋势向上<br>• 立讯精密(002475)：消费电子复苏，底部启动</div>
+        </div>
+        <div class="score-card s-blue">
+          <div class="score-name">🔵 逆势抗跌型</div>
+          <div class="score-code">防御型 · 稳健选择</div>
+          <div class="score-reason">• 中兴通讯(000063)：大盘回调时逆势+4.47%<br>• 浪潮信息(000977)：大盘调整时保持正收益</div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <strong>核心发现：</strong>①光通信产业链全面爆发（光纤→光模块→CPO→PCB）②深海科技持续活跃（巨力索具10连板）③军工板块资金异动明显 ④AI算力分化明显，硬件端持续强势
+      </div>
+    </div>
+  </section>
+
+  <!-- 第6章：操作建议 -->
+  <section class="chapter">
+    <div class="chapter-header">
+      <span class="chapter-num">6</span>
+      <span class="chapter-title">💡 明日操作建议</span>
+    </div>
+    <div class="chapter-body">
+      <div class="score-cards">
+        <div class="score-card s-red">
+          <div class="score-name">🚀 蓄势启动标的（可低吸）</div>
+          <div class="score-reason">
+            <strong>光迅科技(002281)</strong>：回踩5日线缩量，止损-5%<br>
+            <strong>立讯精密(002475)</strong>：回踩10日线企稳，止损-8%<br>
+            <strong>巨力索具(002342)</strong>：若开板回踩涨停价，止损-7%<br>
+            <strong>寒武纪(688256)</strong>：回调至1150附近，止损-10%
+          </div>
+        </div>
+        <div class="score-card s-amber">
+          <div class="score-name">⚡ 连板龙头接力（高风险）</div>
+          <div class="score-reason">
+            <strong>汇源通信(000586)</strong>：5连板，开板后若快速回封可追（风险极大）<br>
+            <strong>中安科(600654)</strong>：4连板后高位震荡，谨慎
+          </div>
+        </div>
+        <div class="score-card s-blue">
+          <div class="score-name">⏸️ 观望等待机会</div>
+          <div class="score-reason">
+            <strong>回避：</strong>工业富联(-11.94亿)、蓝色光标(-10.83亿)、新易盛(-11.65亿)<br>
+            <strong>建议：</strong>等待指数企稳4000点后再加仓
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第7章：风险提示 -->
+  <section class="chapter">
+    <div class="chapter-header">
+      <span class="chapter-num">7</span>
+      <span class="chapter-title">⚠️ 风险提示</span>
+    </div>
+    <div class="chapter-body">
+      <div class="risk-box" style="margin-bottom:12px;">
+        <strong>系统性风险：</strong>外围市场不确定性、中美关系扰动、汇率波动
+      </div>
+      <div class="risk-box" style="margin-bottom:12px;">
+        <strong>热点退潮风险：</strong>AI应用端昨日暴涨后回调（蓝色光标-2.15%）、贵金属金价高位震荡、连板股汇源通信5连板后明日若不能继续封板，小心踩踏
+      </div>
+      <div class="risk-box">
+        <strong>个股风险：</strong>4月财报季警惕业绩地雷、部分次新股面临解禁压力、关注近期公告减持的个股
+      </div>
+    </div>
+  </section>
+
+  <!-- 第8章：仓位建议 -->
+  <section class="chapter">
+    <div class="chapter-header">
+      <span class="chapter-num">8</span>
+      <span class="chapter-title">📊 仓位建议</span>
+    </div>
+    <div class="chapter-body">
+      <div class="position-box">
+        <div>
+          <div class="position-label">当前市场环境评级</div>
+          <div style="font-size:16px;font-weight:700;color:var(--amber);">中性偏谨慎 ⭐⭐⭐☆☆</div>
+          <div class="position-label" style="margin-top:16px;">建议仓位</div>
+          <div class="position-value">30-40%</div>
+        </div>
+        <div class="position-desc">
+          <p><strong>配置方向：</strong></p>
+          <ul class="bullet-list">
+            <li>主线（光通信/AI算力）：40% · 代表：光迅科技、天孚通信、寒武纪</li>
+            <li>军工（趋势股）：25% · 代表：航天电器、航天机电</li>
+            <li>深海科技（连板龙头）：15% · 代表：汇源通信、巨力索具</li>
+            <li>防御/观望：20% · 空仓或ETF</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="footer-bar"></div>
+<footer class="page-footer">
+  <p><strong>AI量化复盘平台</strong> · 数据日期：2026年4月9日 · 生成于18:00</p>
+  <p style="margin-top:6px;">数据来源：东方财富 · 证券之星 · 同花顺 · 仅供参考，不构成投资建议</p>
+</footer>
+
+</body>
+</html>
